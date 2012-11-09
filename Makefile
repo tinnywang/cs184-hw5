@@ -15,7 +15,7 @@ endif
 
 RM = /bin/rm -f 
 all: transform
-transform: main.o shaders.o Transform.o readfile.o display.o variables.h readfile.h shaders.h Transform.h grader.o UCB/grader.h
+transform: main.o shaders.o Transform.o readfile.o display.o variables.h readfile.h shaders.h Transform.h grader.o UCB/grader.h Raytrace.h Raytrace.o
 	$(CC) $(CFLAGS) -o transforms shaders.o main.o Transform.o readfile.o display.o grader.o $(INCFLAGS) $(LDFLAGS) 
 main.o: main.cpp shaders.h Transform.h variables.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c main.cpp
@@ -29,6 +29,8 @@ Transform.o: Transform.cpp Transform.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Transform.cpp  
 grader.o: UCB/grader.cpp UCB/grader.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c UCB/grader.cpp
+Raytrace.o: Raytrace.cpp Raytrace.h
+	$(CC) $(CFLAGS) $(INCFLAGS) -c Raytrace.cpp
 clean: 
 	$(RM) *.o transforms *.png
 
