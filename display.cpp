@@ -98,10 +98,12 @@ void display() {
           // YOUR CODE FOR HW 2 HERE. 
           // Set up the object transformations 
           // And pass in the appropriate material properties
-	    if (obj -> type == sphere) {
-	      obj -> transform = obj -> transform * Transform::translate(obj -> position[0], obj -> position[1], obj -> position[2]);
-	    }
 	    mat4 transform = obj -> transform;
+	    if (obj -> type == sphere) {
+	      transform = Transform::translate(obj -> position[0],
+					       obj -> position[1],
+					       obj -> position[2]) * transform;
+	    }
 	    glLoadMatrixf(&glm::transpose(transform * transf)[0][0]);
 	    glUniform4fv(ambientcol, 1, obj -> ambient);
             glUniform4fv(diffusecol, 1, obj -> diffuse);
