@@ -100,9 +100,9 @@ void display() {
           // And pass in the appropriate material properties
 	    mat4 transform = obj -> transform;
 	    if (obj -> type == sphere) {
-	      transform = Transform::translate(obj -> position[0],
+	      transform = transform * Transform::translate(obj -> position[0],
 					       obj -> position[1],
-					       obj -> position[2]) * transform;
+					       obj -> position[2]);
 	    }
 	    glLoadMatrixf(&glm::transpose(transform * transf)[0][0]);
 	    glUniform4fv(ambientcol, 1, obj -> ambient);
