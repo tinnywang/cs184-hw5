@@ -38,7 +38,7 @@ void transformvec (const GLfloat input[4], GLfloat output[4]) {
 }
 
 void display() {
-	glClearColor(0, 0, 1, 0);
+	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         
@@ -98,8 +98,12 @@ void display() {
           // YOUR CODE FOR HW 2 HERE. 
           // Set up the object transformations 
           // And pass in the appropriate material properties
+	    if (obj -> type == sphere) {
+	      obj -> transform = obj -> transform * Transform::translate(obj -> position[0], obj -> position[1], obj -> position[2]);
+	    }
 	    mat4 transform = obj -> transform;
 	    glLoadMatrixf(&glm::transpose(transform * transf)[0][0]);
+	    glUniform4fv(ambientcol, 1, obj -> ambient);
             glUniform4fv(diffusecol, 1, obj -> diffuse);
             glUniform4fv(specularcol, 1, obj -> specular);
             glUniform4fv(emissioncol, 1, obj -> emission);
@@ -111,8 +115,21 @@ void display() {
           if (obj -> type == sphere) {
             const int tessel = 20;
 	    glutSolidSphere(obj->radius, tessel, tessel) ; 
-          }
-	    
+          } else if (obj -> type == tri) {
+	    glEnableClientState(GL_VERTEX_ARRAY);
+	    glVertexPointer(3, GL_FLOAT, 0, &(obj -> vertices));
+	    glDrawArrays(GL_TRIANGLES, 0, 3);
+	    glDisableClientState(GL_VERTEX_ARRAY);
+	  } else if (obj -> type == trinormal) {
+	    glEnableClientState(GL_VERTEX_ARRAY);
+	    glEnableClientState(GL_NORMAL_ARRAY);
+	    glVertexPointer(3, GL_FLOAT, 0, &(obj -> vertices));
+	    glNormalPointer(GL_FLOAT, 0, &(obj -> normals));	
+	    glDrawArrays(GL_TRIANGLES, 0, 3);
+	    glDisableClientState(GL_VERTEX_ARRAY);
+	    glDisableClientState(GL_NORMAL_ARRAY);
+	    glDrawArrays(GL_TRIANGLES, 0, 3);
+	  }
         }
     
         glutSwapBuffers();

@@ -65,7 +65,6 @@ void readfile(const char * filename) {
   string str, cmd ; 
   ifstream in ;
   in.open(filename) ;
-  int num_verts, num_vertnorms; 
   if (in.is_open()) {
 
     // I need to implement a matrix stack to store transforms.  
@@ -174,42 +173,25 @@ void readfile(const char * filename) {
 	  validinput = readvals(s, 1, values);
 	  if (validinput) {
 	    maxverts = values[0];
-	    vertices = vector<glm::vec3>(maxverts);
-	    glGenBuffers(1, &vertex_buffer);
-	    num_verts = 0;
+	    vertices = vector<glm::vec3>();
 	  }
  	} else if (cmd == "maxvertnorms") {
 	  validinput = readvals(s, 1, values);
 	  if (validinput) {
 	    maxvertnorms = values[0];
-	    vertices = vector<glm::vec3>(maxvertnorms);
-	    normals = vector<glm::vec3>(maxvertnorms);
-	    glGenBuffers(1, &vertex_buffer);
-	    glGenBuffers(1, &normal_buffer);
-	    num_vertnorms = 0;
+	    vertices = vector<glm::vec3>();
+	    normals = vector<glm::vec3>();
 	  }
 	} else if (cmd == "vertex") {
 	  validinput = readvals(s, 3, values);
 	  if (validinput) {
-	    ++num_verts;
 	    vertices.push_back(glm::vec3(values[0], values[1], values[2]));
 	  }
-	  if (num_verts == maxverts) {
-	    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
-	  } 
 	} else if (cmd == "vertexnormal") {
 	  validinput = readvals(s, 6, values);
 	  if (validinput) {
-	    ++num_vertnorms;
 	    vertices.push_back(glm::vec3(values[0], values[1], values[2]));
 	    normals.push_back(glm::vec3(values[3], values[4], values[5]));
-	  }
-	  if (num_vertnorms == maxvertnorms) {
-	    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
-	    glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
-	    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), &normals[0], GL_STATIC_DRAW);
 	  }
 	} else if (cmd == "sphere" || cmd == "tri" || cmd == "trinormal") {
           if (numobjects == maxobjects) // No more objects 
@@ -217,6 +199,7 @@ void readfile(const char * filename) {
           else {
             object * obj = &(objects[numobjects]) ; 
             for (i = 0 ; i < 4 ; i++) {
+	      (obj -> ambient)[i] = ambient[i] ;
               (obj -> diffuse)[i] = diffuse[i] ; 
               (obj -> specular)[i] = specular[i] ; 
               (obj -> emission)[i] = emission[i] ;
@@ -234,23 +217,20 @@ void readfile(const char * filename) {
 	      } 
             } else if (cmd == "tri") {
 	      obj -> type = tri ;
-	      obj -> vertex_buffer = vertex_buffer;
 	      validinput = readvals(s, 3, values);
 	      if (validinput) {
 		for (i = 0; i < 3; i++) {
-		  obj -> vertices[i] = values[i];
+		  obj -> vertices[i] = vertices[values[i]];
 		}
 		// TODO: compute normal
 	      }
 	    } else if (cmd == "trinormal") {
 	      obj -> type = trinormal ;
-	      obj -> vertex_buffer = vertex_buffer;
-	      obj -> normal_buffer = normal_buffer;
 	      validinput = readvals(s, 6, values);
 	      if (validinput) {
 		for (i = 0; i < 3; i++) {
-		  obj -> vertices[i] = values[i];
-		  obj -> normals[i] = values[i];
+		  obj -> vertices[i] = vertices[values[i]];
+		  obj -> normals[i] = normals[values[i]];
 		}
 		// TODO: compute normal
 	      }

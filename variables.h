@@ -60,16 +60,15 @@ EXTERN GLfloat emission[4] ;
 EXTERN GLfloat shininess ; 
 
 // For multiple objects, read from a file.  
-const int maxobjects = 10 ; 
+const int maxobjects = 1000 ; 
 EXTERN int numobjects ; 
 EXTERN struct object {
   shape type ;
   GLfloat position[3];
   GLfloat radius;
-  GLuint vertex_buffer;
-  GLuint vertices[3];
-  GLuint normal_buffer;
-  GLuint normals[3];
+  vec3 vertices[3];
+  vec3 normals[3];
+  GLfloat ambient[4] ;
   GLfloat diffuse[4] ; 
   GLfloat specular[4] ;
   GLfloat emission[4] ; 
@@ -80,8 +79,6 @@ EXTERN struct object {
 // Variables for specifying geometry
 EXTERN vector<vec3> vertices;
 EXTERN vector<vec3> normals;
-EXTERN GLuint vertex_buffer;
-EXTERN GLuint normal_buffer;
 EXTERN int maxvertnorms;
 EXTERN int maxverts;
 
