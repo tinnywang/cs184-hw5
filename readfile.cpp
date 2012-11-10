@@ -204,44 +204,44 @@ void readfile(const char * filename) {
                         if (cmd == "sphere") {
                             validinput = readvals(s, 4, values);
                             if (validinput) {
-                                Sphere obj(values[0], values[1], values[2], values[3]);
+                                Sphere* obj = new Sphere(values[0], values[1], values[2], values[3]);
                                 for (i = 0 ; i < 4 ; i++) {
-                                  obj.ambient[i] = ambient[i] ;
-                                  obj.diffuse[i] = diffuse[i] ;
-                                  obj.specular[i] = specular[i] ;
-                                  obj.emission[i] = emission[i] ;
+                                  obj->ambient[i] = ambient[i] ;
+                                  obj->diffuse[i] = diffuse[i] ;
+                                  obj->specular[i] = specular[i] ;
+                                  obj->emission[i] = emission[i] ;
                                 }
-                                obj.shininess = shininess ;
-                                obj.transform = transfstack.top() ;
+                                obj->shininess = shininess ;
+                                obj->transform = transfstack.top() ;
                                 objects.push_back(obj);
                             }
                         } else if (cmd == "tri") {
                             validinput = readvals(s, 3, values);
                             if (validinput) {
-                                Triangle obj(vertices[values[0]], vertices[values[1]], vertices[values[2]]);
+                                Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]]);
                                 for (i = 0 ; i < 4 ; i++) {
-                                  obj.ambient[i] = ambient[i] ;
-                                  obj.diffuse[i] = diffuse[i] ;
-                                  obj.specular[i] = specular[i] ;
-                                  obj.emission[i] = emission[i] ;
+                                  obj->ambient[i] = ambient[i] ;
+                                  obj->diffuse[i] = diffuse[i] ;
+                                  obj->specular[i] = specular[i] ;
+                                  obj->emission[i] = emission[i] ;
                                 }
-                                obj.shininess = shininess ;
-                                obj.transform = transfstack.top() ;
+                                obj->shininess = shininess ;
+                                obj->transform = transfstack.top() ;
                                 objects.push_back(obj);
                             }
                         } else if (cmd == "trinormal") {
                             validinput = readvals(s, 6, values);
                             if (validinput) {
-                                Triangle obj(vertices[values[0]], vertices[values[1]], vertices[values[2]],
+                                Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]],
                                              normals[values[0]], normals[values[1]], normals[values[2]]);
                                 for (i = 0 ; i < 4 ; i++) {
-                                  obj.ambient[i] = ambient[i] ;
-                                  obj.diffuse[i] = diffuse[i] ;
-                                  obj.specular[i] = specular[i] ;
-                                  obj.emission[i] = emission[i] ;
+                                  obj->ambient[i] = ambient[i] ;
+                                  obj->diffuse[i] = diffuse[i] ;
+                                  obj->specular[i] = specular[i] ;
+                                  obj->emission[i] = emission[i] ;
                                 }
-                                obj.shininess = shininess ;
-                                obj.transform = transfstack.top() ;
+                                obj->shininess = shininess ;
+                                obj->transform = transfstack.top() ;
                                 objects.push_back(obj);
                             }
                         }

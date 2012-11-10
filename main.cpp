@@ -56,5 +56,9 @@ int main(int argc, char* argv[]) {
 
     saveScreenshot(bitmap, "temp.png");
     FreeImage_DeInitialise();
+    
+    for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+      delete *it;
+    }
     return 0;
 }

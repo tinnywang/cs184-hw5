@@ -1,4 +1,5 @@
 #include "Triangle.h"
+#include <iostream>
 
 Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3, vec3 norm1, vec3 norm2, vec3 norm3) {
   vertices[0] = vert1;
@@ -19,5 +20,5 @@ Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3) {
 }
 
 std::pair<bool,vec3> Triangle::intersect(vec3 ray) {
-  return std::make_pair(true, vec3(1,2,3));
+  return std::make_pair(false, vec3(1,2,3));
 }
