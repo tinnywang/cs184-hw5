@@ -1,6 +1,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
-#include <gl/gl.h>
+#include <GL/gl.h>
 #include <glm/glm.hpp>
 #include <utility>
 
