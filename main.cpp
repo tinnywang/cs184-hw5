@@ -178,6 +178,8 @@ void init() {
     ambient[3] = 1;
 }
 
+void display() {}
+
 int main(int argc, char* argv[]) {
 
     if (argc < 2) {

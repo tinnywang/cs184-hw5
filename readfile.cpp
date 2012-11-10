@@ -201,40 +201,47 @@ void readfile(const char * filename) {
                         cerr << "Reached Maximum Number of Objects " << numobjects << " Will ignore further objects\n" ;
                     else {
                         if (cmd == "sphere") {
-                            Sphere obj;
-                            for (i = 0 ; i < 4 ; i++) {
-                              obj.ambient[i] = ambient[i] ;
-                              obj.diffuse[i] = diffuse[i] ;
-                              obj.specular[i] = specular[i] ;
-                              obj.emission[i] = emission[i] ;
-                            }
-                            obj.shininess = shininess ;
-                            obj.transform = transfstack.top() ;
                             validinput = readvals(s, 4, values);
                             if (validinput) {
-                                obj -> position[0] = values[0];
-                                obj -> position[1] = values[1];
-                                obj -> position[2] = values[2];
-                                obj -> radius = values[3];
+                                Sphere obj(values[0], values[1], values[2], values[3]);
+                                for (i = 0 ; i < 4 ; i++) {
+                                  obj.ambient[i] = ambient[i] ;
+                                  obj.diffuse[i] = diffuse[i] ;
+                                  obj.specular[i] = specular[i] ;
+                                  obj.emission[i] = emission[i] ;
+                                }
+                                obj.shininess = shininess ;
+                                obj.transform = transfstack.top() ;
+                                objects.push_back(obj);
                             }
                         } else if (cmd == "tri") {
-                            obj -> type = tri ;
                             validinput = readvals(s, 3, values);
                             if (validinput) {
-                                for (i = 0; i < 3; i++) {
-                                    obj -> vertices[i] = vertices[values[i]];
+                                Triangle obj(vertices[values[0]], vertices[values[1]], vertices[values[2]]);
+                                for (i = 0 ; i < 4 ; i++) {
+                                  obj.ambient[i] = ambient[i] ;
+                                  obj.diffuse[i] = diffuse[i] ;
+                                  obj.specular[i] = specular[i] ;
+                                  obj.emission[i] = emission[i] ;
                                 }
-                                // TODO: compute normal
+                                obj.shininess = shininess ;
+                                obj.transform = transfstack.top() ;
+                                objects.push_back(obj);
                             }
                         } else if (cmd == "trinormal") {
-                            obj -> type = trinormal ;
                             validinput = readvals(s, 6, values);
                             if (validinput) {
-                                for (i = 0; i < 3; i++) {
-                                    obj -> vertices[i] = vertices[values[i]];
-                                    obj -> normals[i] = normals[values[i]];
+                                Triangle obj(vertices[values[0]], vertices[values[1]], vertices[values[2]],
+                                             normals[values[0]], normals[values[1]], normals[values[2]]);
+                                for (i = 0 ; i < 4 ; i++) {
+                                  obj.ambient[i] = ambient[i] ;
+                                  obj.diffuse[i] = diffuse[i] ;
+                                  obj.specular[i] = specular[i] ;
+                                  obj.emission[i] = emission[i] ;
                                 }
-                                // TODO: compute normal
+                                obj.shininess = shininess ;
+                                obj.transform = transfstack.top() ;
+                                objects.push_back(obj);
                             }
                         }
                         ++numobjects;

@@ -8,6 +8,8 @@
 // extern, depending on if included in the main program or not.
 #include <vector>
 #include "Object.h"
+#include "Sphere.h"
+#include "Triangle.h"
 
 #ifdef MAINPROGRAM
 #define EXTERN
