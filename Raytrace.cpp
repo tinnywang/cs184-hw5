@@ -7,8 +7,8 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
     for (float j = 0; j < height; j++) {
       glm::vec3 ray = calculateRay(eye, center, up, fovx, fovy, width, height, i+.5, j+.5);
       RGBQUAD color;
-      color.rgbRed = 0;
-      color.rgbGreen = 255;
+      color.rgbRed = 255;
+      color.rgbGreen = 0;
       color.rgbBlue=0;
       FreeImage_SetPixelColor(bitmap, i, j, &color);
       // calculate intersection of ray and object in scene
