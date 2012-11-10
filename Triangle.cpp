@@ -1,4 +1,4 @@
-#include "Triangle.h"
+  #include "Triangle.h"
 #include <iostream>
 
 Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3, vec3 norm1, vec3 norm2, vec3 norm3) {
@@ -22,7 +22,7 @@ Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3) {
 std::pair<bool,vec3> Triangle::intersect(vec3 origin, vec3 direction) {
   vec3 p0 = vertices[0], p1 = vertices[1], p2 = vertices[2];
   vec3 normal = glm::normalize(glm::cross(p1 - p0, p2 - p0));
-  GLfloat t = -glm::dot((origin - p0), normal)/glm::dot(direction, normal);
+  GLfloat t = glm::dot((p0 - origin), normal)/glm::dot(direction, normal);
   vec3 ray = origin + direction * t;
   bool hit = glm::dot(glm::cross(p1 - p0, ray - p0), normal) >= 0 &&
 	     glm::dot(glm::cross(p2 - p1, ray - p1), normal) >= 0 &&
