@@ -15,9 +15,9 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
         std::pair<bool, vec3> result = it->intersect(ray);
         if(result.first) {
           RGBQUAD color;
-          color.rgbRed = it->diffuse[0];
-          color.rgbGreen = it->diffuse[1];
-          color.rgbBlue = it->diffuse[2];
+          color.rgbRed = 255 * it->diffuse[0];
+          color.rgbGreen = 255 * it->diffuse[1];
+          color.rgbBlue = 255 * it->diffuse[2];
           FreeImage_SetPixelColor(bitmap, i, j, &color);
         }
         break;
