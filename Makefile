@@ -23,7 +23,7 @@ readfile.o: readfile.cpp readfile.h variables.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c readfile.cpp
 Transform.o: Transform.cpp Transform.h 
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Transform.cpp  
-Raytrace.o: Raytrace.cpp Raytrace.h
+Raytrace.o: Raytrace.cpp Raytrace.h variables.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Raytrace.cpp
 Triangle.o: Triangle.cpp Triangle.h Object.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Triangle.cpp

@@ -7,6 +7,7 @@
 // Since all files need access to it, we define EXTERN as either blank or
 // extern, depending on if included in the main program or not.
 #include <vector>
+#include <string>
 #include "Object.h"
 #include "Sphere.h"
 #include "Triangle.h"
@@ -38,7 +39,7 @@ EXTERN float fovy ;
 EXTERN int depth ;
 #endif
 
-EXTERN string output;
+EXTERN std::string output;
 
 EXTERN bool useGlu; // Toggle use of "official" opengl/glm transform vs user
 EXTERN GLuint vertexshader, fragmentshader, shaderprogram ; // shaders
@@ -68,8 +69,8 @@ EXTERN int numobjects ;
 EXTERN std::vector<Object> objects ;
 
 // Variables for specifying geometry
-EXTERN vector<vec3> vertices;
-EXTERN vector<vec3> normals;
+EXTERN std::vector<vec3> vertices;
+EXTERN std::vector<vec3> normals;
 EXTERN int maxvertnorms;
 EXTERN int maxverts;
 

@@ -1,6 +1,8 @@
-#include "Raytrace.h"
 #include <limits>
 #include <FreeImage.h>
+#include "variables.h"
+#include "Raytrace.h"
+
 
 void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap) {
   for (float i = 0; i < width; i++) {
@@ -21,7 +23,7 @@ glm::vec3 Raytrace::calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, 
   vec3 w = glm::normalize(eye - center);
   vec3 u = glm::normalize(glm::cross(up, w));
   vec3 v = glm::cross(w, u);
-  float a = glm::tan(fovx/2) * ((j-(width/2))/(width/2));
-  float b = glm::tan(fovy/2) * (((height/2)-i)/(height/2));
+  float a = glm::tan(fovx/2) * ((j-(width/2.0))/(width/2.0));
+  float b = glm::tan(fovy/2) * (((height/2.0)-i)/(height/2.0));
   return eye + glm::normalize(a*u + b*v - w);
 }
