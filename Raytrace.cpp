@@ -1,4 +1,6 @@
 #include <limits>
+#include <iostream>
+
 #include <utility>
 #include <FreeImage.h>
 #include "variables.h"
