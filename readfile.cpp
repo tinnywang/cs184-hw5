@@ -200,17 +200,16 @@ void readfile(const char * filename) {
                     if (numobjects == maxobjects) // No more objects
                         cerr << "Reached Maximum Number of Objects " << numobjects << " Will ignore further objects\n" ;
                     else {
-                        object * obj = &(objects[numobjects]) ;
-                        for (i = 0 ; i < 4 ; i++) {
-                            (obj -> ambient)[i] = ambient[i] ;
-                            (obj -> diffuse)[i] = diffuse[i] ;
-                            (obj -> specular)[i] = specular[i] ;
-                            (obj -> emission)[i] = emission[i] ;
-                        }
-                        obj -> shininess = shininess ;
-                        obj -> transform = transfstack.top() ;
                         if (cmd == "sphere") {
-                            obj -> type = sphere ;
+                            Sphere obj;
+                            for (i = 0 ; i < 4 ; i++) {
+                              obj.ambient[i] = ambient[i] ;
+                              obj.diffuse[i] = diffuse[i] ;
+                              obj.specular[i] = specular[i] ;
+                              obj.emission[i] = emission[i] ;
+                            }
+                            obj.shininess = shininess ;
+                            obj.transform = transfstack.top() ;
                             validinput = readvals(s, 4, values);
                             if (validinput) {
                                 obj -> position[0] = values[0];

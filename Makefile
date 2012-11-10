@@ -31,6 +31,11 @@ grader.o: UCB/grader.cpp UCB/grader.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c UCB/grader.cpp
 Raytrace.o: Raytrace.cpp Raytrace.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Raytrace.cpp
+Triangle.o: Triangle.cpp Triangle.h Object.h
+	$(CC) $(CFLAGS) $(INCFLAGS) -c Triangle.cpp
+Sphere.o: Sphere.cpp Sphere.h Object.h
+	$(CC) $(CFLAGS) $(INCFLAGS) -c Sphere.cpp
+
 clean: 
 	$(RM) *.o transforms *.png
 

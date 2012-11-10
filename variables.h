@@ -7,6 +7,7 @@
 // Since all files need access to it, we define EXTERN as either blank or
 // extern, depending on if included in the main program or not.
 #include <vector>
+#include "Object.h"
 
 #ifdef MAINPROGRAM
 #define EXTERN
@@ -39,7 +40,6 @@ EXTERN string output;
 EXTERN bool useGlu; // Toggle use of "official" opengl/glm transform vs user
 EXTERN GLuint vertexshader, fragmentshader, shaderprogram ; // shaders
 static enum {view, translate, scale} transop ; // which operation to transform
-enum shape {sphere, tri, trinormal} ;
 EXTERN float sx, sy ; // the scale in x and y
 EXTERN float tx, ty ; // the translation in x and y
 
@@ -62,19 +62,7 @@ EXTERN GLfloat shininess ;
 // For multiple objects, read from a file.
 const int maxobjects = 1000 ;
 EXTERN int numobjects ;
-EXTERN struct object {
-    shape type ;
-    GLfloat position[3];
-    GLfloat radius;
-    vec3 vertices[3];
-    vec3 normals[3];
-    GLfloat ambient[4] ;
-    GLfloat diffuse[4] ;
-    GLfloat specular[4] ;
-    GLfloat emission[4] ;
-    GLfloat shininess ;
-    mat4 transform ;
-} objects[maxobjects] ;
+EXTERN std::vector<Object> objects ;
 
 // Variables for specifying geometry
 EXTERN vector<vec3> vertices;
