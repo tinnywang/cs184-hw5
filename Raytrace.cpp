@@ -15,7 +15,7 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
   }
 }
 
-glm::vec3 calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, float i, float j) {
+glm::vec3 Raytrace::calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, float i, float j) {
   vec3 w = glm::normalize(eye - center);
   vec3 u = glm::normalize(glm::cross(up, w));
   vec3 v = glm::cross(w, u);
