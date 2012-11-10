@@ -47,9 +47,9 @@ int main(int argc, char* argv[]) {
     FreeImage_Initialise();
     init();
     readfile(argv[1]) ;
-    
+
     FIBITMAP* bitmap = FreeImage_Allocate(w, h, bpp);
-    float fovx = fovy * static_cast<float>(w/h);
+    float fovx = fovy * static_cast<float>(w)/h;
 
     Raytrace rt;
     rt.raytrace(eye, center, up, fovx, fovy, w, h, bitmap);
