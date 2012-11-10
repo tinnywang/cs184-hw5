@@ -54,7 +54,8 @@ bool readvals(stringstream &s, const int numvals, GLfloat * values) {
     for (int i = 0 ; i < numvals ; i++) {
         s >> values[i] ;
         if (s.fail()) {
-            cout << "Failed reading value " << i << " will skip\n" ;
+
+            cout << "Failed reading value " << i << " will skip " << numvals <<"\n" ;
             return false ;
         }
     }
@@ -123,14 +124,14 @@ void readfile(const char * filename) {
                     }
                 }
                 else if (cmd == "specular") {
-                    validinput = readvals(s, 4, values) ;
+                    validinput = readvals(s, 3, values) ;
                     if (validinput) {
                         for (i = 0 ; i < 3 ; i++) specular[i] = values[i] ;
                         specular[3] = 1.0;
                     }
                 }
                 else if (cmd == "emission") {
-                    validinput = readvals(s, 4, values) ;
+                    validinput = readvals(s, 3, values) ;
                     if (validinput) {
                         for (i = 0 ; i < 3 ; i++) emission[i] = values[i] ;
                         emission[3] = 1.0;
@@ -303,8 +304,6 @@ void readfile(const char * filename) {
         sx = sy = 1.0 ; // scales in x and y
         tx = ty = 0.0 ; // translation in x and y
         useGlu = false; // don't use the glu perspective/lookat fns
-
-        glEnable(GL_DEPTH_TEST);
 
     }
     else {

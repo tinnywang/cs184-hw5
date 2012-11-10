@@ -25,6 +25,7 @@ EXTERN vec3 up;  // The (regularly updated) vector coordinates of the up
 vec3 eyeinit(0.0,0.0,5.0) ; // Initial eye position, also for resets
 vec3 upinit(0.0,1.0,0.0) ; // Initial up position, also for resets
 vec3 center(0.0,0.0,0.0) ; // Center look at point
+int bpp = 24; // bits per pixel RGB. we have three 8 bit numbers
 int w = 600, h = 400 ; // width and height
 int depth = 5;
 float fovy = 90.0 ; // For field of view
