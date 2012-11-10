@@ -11,11 +11,8 @@
 #include <deque>
 #include <stack>
 #include <GL/glut.h>
-#include "Raytrace.h"
-#include "shaders.h"
 #include "Transform.h"
 #include <FreeImage.h>
-#include "UCB/grader.h"
 
 using namespace std ;
 
@@ -23,6 +20,7 @@ using namespace std ;
 #define MAINPROGRAM
 #include "variables.h"
 #include "readfile.h" // prototypes for readfile.cpp  
+#include "Raytrace.h"
 
 void saveScreenshot(FIBITMAP* img, string fname) {
     std::cout << "Saving screenshot: " << fname << "\n";
