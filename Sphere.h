@@ -10,7 +10,7 @@ class Sphere : public Object
 public:
 	Sphere(GLfloat pos1, GLfloat pos2, GLfloat pos3, GLfloat radius) ;
 	virtual ~Sphere() {};
-	virtual std::pair<bool,vec3> intersect(vec3 ray);
+	virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction);
   
 private:
   GLfloat position[3];

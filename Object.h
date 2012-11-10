@@ -13,7 +13,7 @@ class Object
 public:
   Object() {};
 	virtual ~Object() {};
-  virtual std::pair<bool,vec3> intersect(vec3 ray) {};
+  virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction) {};
   
   shape type ;
   GLfloat ambient[4] ;

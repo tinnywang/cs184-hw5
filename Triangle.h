@@ -14,7 +14,7 @@ public:
 	
 	virtual ~Triangle() {};
 
-  virtual std::pair<bool,vec3> intersect(vec3 ray);
+  virtual std::pair<bool,vec3> intersect(vec3 eye, vec3 direction);
   
 private:
   vec3 vertices[3];
