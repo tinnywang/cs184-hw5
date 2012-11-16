@@ -15,11 +15,14 @@ public:
 	virtual ~Triangle() {};
 
   virtual std::pair<bool,vec3> intersect(vec3 eye, vec3 direction);
+  virtual void calculateTransform(void);
   
 private:
   vec3 _vertices[3];
   vec3 _normals[3];
   bool _normal;
+  vec3 _t_vertices[3];
+  vec3 _t_normals[3];
 };
 
 #endif

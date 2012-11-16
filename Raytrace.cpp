@@ -29,9 +29,9 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
       }
       if (min_distance != std::numeric_limits<float>::max()) {
         RGBQUAD color;
-        color.rgbRed = 255 * (i_obj)->diffuse[0];
-        color.rgbGreen = 255 * (i_obj)->diffuse[1];
-        color.rgbBlue = 255 * (i_obj)->diffuse[2];
+        color.rgbRed = 255 * (i_obj)->_diffuse[0];
+        color.rgbGreen = 255 * (i_obj)->_diffuse[1];
+        color.rgbBlue = 255 * (i_obj)->_diffuse[2];
         FreeImage_SetPixelColor(bitmap, j, height - i - 1, &color);
       }
       // calculate intersection of ray and object in scene
