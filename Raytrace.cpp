@@ -12,15 +12,27 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
   for (float i = 0; i < height; i++) {
     for (float j = 0; j < width; j++) {
       glm::vec3 ray_direction = calculateRay(eye, center, up, fovx, fovy, width, height, i+.5, j+.5);
+      float min_distance = std::numeric_limits<float>::max();
+      Object* i_obj;
+      glm::vec3 intersect;   // idk if u need this
       for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-        std::pair<bool, vec3> result = (*it)->intersect(eye, ray_direction);
+        std::pair<bool, glm::vec3> result = (*it)->intersect(eye, ray_direction);
         if(result.first) {
-          RGBQUAD color;
-          color.rgbRed = 255 * (*it)->diffuse[0];
-          color.rgbGreen = 255 * (*it)->diffuse[1];
-          color.rgbBlue = 255 * (*it)->diffuse[2];
-          FreeImage_SetPixelColor(bitmap, j, height - i - 1, &color);
+          glm::vec3 difference = result.second - eye;
+          float dist = glm::dot(difference, difference);
+          if (dist < min_distance) {
+            min_distance = dist;
+            i_obj = *it;
+            intersect = result.second;
+          }
         }
+      }
+      if (min_distance != std::numeric_limits<float>::max()) {
+        RGBQUAD color;
+        color.rgbRed = 255 * (i_obj)->diffuse[0];
+        color.rgbGreen = 255 * (i_obj)->diffuse[1];
+        color.rgbBlue = 255 * (i_obj)->diffuse[2];
+        FreeImage_SetPixelColor(bitmap, j, height - i - 1, &color);
       }
       // calculate intersection of ray and object in scene
       // set pixel color
