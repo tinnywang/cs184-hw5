@@ -17,9 +17,9 @@ public:
   virtual std::pair<bool,vec3> intersect(vec3 eye, vec3 direction);
   
 private:
-  vec3 vertices[3];
-  vec3 normals[3];
-  bool normal;
+  vec3 _vertices[3];
+  vec3 _normals[3];
+  bool _normal;
 };
 
 #endif

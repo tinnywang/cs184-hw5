@@ -13,8 +13,8 @@ public:
 	virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction);
   
 private:
-  GLfloat position[3];
-  GLfloat radius;
+  GLfloat _position[3];
+  GLfloat _radius;
 };
 
 #endif

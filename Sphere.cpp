@@ -1,11 +1,11 @@
 #include "Sphere.h"
 
 Sphere::Sphere(GLfloat pos1, GLfloat pos2, GLfloat pos3, GLfloat rad) {
-  position[0] = pos1;
-  position[1] = pos2;
-  position[2] = pos3;
-  radius = rad;
-  type = sphere;
+  _position[0] = pos1;
+  _position[1] = pos2;
+  _position[2] = pos3;
+  _radius = rad;
+  _type = sphere;
 }
 
 std::pair<bool,vec3> Sphere::intersect(vec3 origin, vec3 direction) {

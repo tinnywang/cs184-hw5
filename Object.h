@@ -15,13 +15,13 @@ public:
 	virtual ~Object() {};
   virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction) {};
   
-  shape type ;
-  GLfloat ambient[4] ;
-  GLfloat diffuse[4] ;
-  GLfloat specular[4] ;
-  GLfloat emission[4] ;
-  GLfloat shininess ;
-  glm::mat4 transform ;
+  shape _type ;
+  GLfloat _ambient[4] ;
+  GLfloat _diffuse[4] ;
+  GLfloat _specular[4] ;
+  GLfloat _emission[4] ;
+  GLfloat _shininess ;
+  glm::mat4 _transform ;
 };
 
 #endif
