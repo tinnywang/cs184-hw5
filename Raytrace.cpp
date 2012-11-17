@@ -34,8 +34,6 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
         color.rgbBlue = 255 * (i_obj)->_diffuse[2];
         FreeImage_SetPixelColor(bitmap, j, height - i - 1, &color);
       }
-      // calculate intersection of ray and object in scene
-      // set pixel color
     }
   }
 }
