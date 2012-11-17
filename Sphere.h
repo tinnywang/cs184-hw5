@@ -11,7 +11,6 @@ public:
 	Sphere(GLfloat pos1, GLfloat pos2, GLfloat pos3, GLfloat radius) ;
 	virtual ~Sphere() {};
 	virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction);
-  virtual void calculateTransform(void) {};
   
 private:
   GLfloat _position[3];

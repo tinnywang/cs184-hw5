@@ -14,7 +14,6 @@ public:
   Object() {};
 	virtual ~Object() {};
   virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction) {};
-  virtual void calculateTransform(void) {};
 
   shape _type ;
   GLfloat _ambient[4] ;

@@ -19,6 +19,7 @@ Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3) {
   _type = tri;
 }
 
+// Note that this way of doing transformations is not the same as in lecture but this way is faster ONLY when we generate pictures. Can't handle animation because we calculate only once.
 void Triangle::calculateTransform(void) {
   if (!_transformed) {
     for (int i = 0; i < 3; ++i) {

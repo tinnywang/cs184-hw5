@@ -28,7 +28,7 @@ pushTransform
 # intersection test.
 
 ambient .7 .7 1
-
+diffuse 1 0 0
 scale 2 1 .25
 tri 0 1 5 
 tri 0 5 4 
@@ -50,6 +50,7 @@ pushTransform
 # Note that like OpenGL, commands right-multiply
 
 ambient .7 .7 .4
+diffuse 1 1 0
 
 translate -1.75 -.8 -.25 
 translate 0 0 -2.0 
@@ -74,6 +75,7 @@ pushTransform
 translate +1.75 -.8 -.25
 translate 0 0 -2.0 
 scale 0.15 0.15 2.0 
+diffuse 1 1 0
 tri 0 1 5 
 tri 0 5 4 
 tri 3 7 6
@@ -94,6 +96,8 @@ pushTransform
 translate +1.75 +.8 -.25
 translate 0 0 -2.0 
 scale 0.15 0.15 2.0 
+diffuse 1 1 0
+
 tri 0 1 5 
 tri 0 5 4 
 tri 3 7 6
@@ -114,6 +118,8 @@ pushTransform
 translate -1.75 +.8 -.25
 translate 0 0 -2.0 
 scale 0.15 0.15 2.0 
+diffuse 1 1 0
+
 tri 0 1 5 
 tri 0 5 4 
 tri 3 7 6
@@ -129,7 +135,7 @@ tri 4 6 7
 
 
 # Now draw the spheres
-
+diffuse 0 1 0
 ambient 0 1 0 
 popTransform
 pushTransform 

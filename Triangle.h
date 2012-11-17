@@ -15,7 +15,7 @@ public:
 	virtual ~Triangle() {};
 
   virtual std::pair<bool,vec3> intersect(vec3 eye, vec3 direction);
-  virtual void calculateTransform(void);
+  void calculateTransform(void);
   
 private:
   vec3 _vertices[3];

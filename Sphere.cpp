@@ -9,6 +9,13 @@ Sphere::Sphere(GLfloat pos1, GLfloat pos2, GLfloat pos3, GLfloat rad) {
 }
 
 std::pair<bool,vec3> Sphere::intersect(vec3 origin, vec3 direction) {
+  glm::vec4 homo_origin = glm::vec4(origin[0], origin[1], origin[2], 1);
+  glm::vec4 homo_direction = glm::vec4(direction[0], direction[1], direction[2], 0);
+  homo_origin = homo_origin * glm::inverse(_transform);
+  homo_direction = homo_direction * glm::inverse(_transform);
+  origin = glm::vec3(homo_origin[0]/homo_origin[3], homo_origin[1]/homo_origin[3], homo_origin[2]/homo_origin[3]);
+  direction = glm::vec3(homo_direction[0], homo_direction[1], homo_direction[2]);
+  
   vec3 center(_position[0], _position[1], _position[2]);
   GLfloat a = glm::dot(direction, direction);
   GLfloat b = 2 * glm::dot(direction, origin - center);
@@ -32,5 +39,9 @@ std::pair<bool,vec3> Sphere::intersect(vec3 origin, vec3 direction) {
   } else {
     return std::make_pair(false, center);
   }
-  return std::make_pair(true, origin + direction * t);
+  glm::vec3 intersect = origin + direction * t;
+  glm::vec4 homo_inter = glm::vec4(intersect[0], intersect[1], intersect[2], 1);
+  homo_inter = homo_inter * _transform;
+  intersect = glm::vec3(homo_inter[0]/homo_inter[3], homo_inter[1]/homo_inter[3], homo_inter[2]/homo_inter[3]);
+  return std::make_pair(true, intersect);
 }
