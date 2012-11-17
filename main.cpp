@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
 
     FreeImage_Initialise();
     init();
+    output = "temp.png";
     readfile(argv[1]) ;
 
     FIBITMAP* bitmap = FreeImage_Allocate(w, h, bpp);
@@ -54,7 +55,7 @@ int main(int argc, char* argv[]) {
     Raytrace rt;
     rt.raytrace(eye, center, up, fovx, fovy, w, h, bitmap);
 
-    saveScreenshot(bitmap, "temp.png");
+    saveScreenshot(bitmap, output);
     FreeImage_DeInitialise();
     
     for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
