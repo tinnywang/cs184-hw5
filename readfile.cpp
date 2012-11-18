@@ -85,56 +85,44 @@ void readfile(const char * filename) {
                 bool validinput ; // validity of input
 
                 // Lights
-                if (cmd == "directional" || cmd == "point") {
-                    if (numused == numLights) { // No more Lights
-                        cerr << "Reached Maximum Number of Lights " << numused << " Will ignore further lights\n" ;
-                    } else {
-                        validinput = readvals(s, 6, values) ; // Position/color for lts.
-                        if (validinput) {
-                            for (i = 0; i < 3; i++) {
-                                lightposn[4 * numused + i] = values[i];
-                            }
-                            lightposn[4 * numused + 3] = cmd == "directional" ? 0 : 1;
-                            for (i = 0; i < 3; i++) {
-                                lightcolor[4 * numused + i] = values[i + 3];
-                            }
-                            lightcolor[4 * numused + 3] = 1.0; // alpha = 0
-                            ++numused ;
-                        }
-                    }
-                }
-                else if (cmd == "attenuation") {
+		if (cmd == "directional" || cmd == "point") {
+		    validinput = readvals(s, 6, values);
+		    if (validinput) {
+			if (cmd == "directional") {
+			    lightposn.push_back(glm::vec4(values[0], values[1], values[2], 0));
+			} else {
+			    lightposn.push_back(glm::vec4(values[0], values[1], values[2], 1));
+			}
+			lightcolor.push_back(glm::vec4(values[3], values[4], values[5], 1));
+		    }
+                } else if (cmd == "attenuation") {
                     validinput = readvals(s, 3, values);
-                    if (validinput)
-                        for (i = 0; i < 3; i++) attenuation[i] = values[i];
-                }
-                else if (cmd == "ambient") {
+                    if (validinput) {
+			attenuation = glm::vec3(values[0], values[1], values[2]);
+		    }
+                } else if (cmd == "ambient") {
                     validinput = readvals(s, 3, values) ; // colors
                     if (validinput) {
-                        for (i = 0 ; i < 3 ; i++) ambient[i] = values[i];
-                        ambient[3] = 1.0;
+                        ambient = glm::vec4(values[0], values[1], values[2], 1);
                     }
                 }
                 // Materials
                 else if (cmd == "diffuse") {
                     validinput = readvals(s, 3, values) ;
                     if (validinput) {
-                        for (i = 0 ; i < 3 ; i++) diffuse[i] = values[i] ;
-                        diffuse[3] = 1.0;
+			diffuse = glm::vec4(values[0], values[1], values[2], 1);
                     }
                 }
                 else if (cmd == "specular") {
                     validinput = readvals(s, 3, values) ;
                     if (validinput) {
-                        for (i = 0 ; i < 3 ; i++) specular[i] = values[i] ;
-                        specular[3] = 1.0;
+                        specular = glm::vec4(values[0], values[1], values[2], 1);
                     }
                 }
                 else if (cmd == "emission") {
                     validinput = readvals(s, 3, values) ;
                     if (validinput) {
-                        for (i = 0 ; i < 3 ; i++) emission[i] = values[i] ;
-                        emission[3] = 1.0;
+			emission = glm::vec4(values[0], values[1], values[2], 1);
                     }
                 }
                 else if (cmd == "shininess") {
@@ -219,12 +207,10 @@ void readfile(const char * filename) {
                             validinput = readvals(s, 3, values);
                             if (validinput) {
                                 Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]]);
-                                for (i = 0 ; i < 4 ; i++) {
-                                  obj->_ambient[i] = ambient[i] ;
-                                  obj->_diffuse[i] = diffuse[i] ;
-                                  obj->_specular[i] = specular[i] ;
-                                  obj->_emission[i] = emission[i] ;
-                                }
+                                obj->_ambient = ambient;
+				obj->_diffuse = diffuse;
+				obj->_specular = specular;
+				obj->_emission = emission;
                                 obj->_shininess = shininess ;
                                 obj->_transform = transfstack.top() ;
                                 objects.push_back(obj);
@@ -234,12 +220,10 @@ void readfile(const char * filename) {
                             if (validinput) {
                                 Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]],
                                                              normals[values[0]], normals[values[1]], normals[values[2]]);
-                                for (i = 0 ; i < 4 ; i++) {
-                                  obj->_ambient[i] = ambient[i] ;
-                                  obj->_diffuse[i] = diffuse[i] ;
-                                  obj->_specular[i] = specular[i] ;
-                                  obj->_emission[i] = emission[i] ;
-                                }
+				obj->_ambient = ambient;
+				obj->_diffuse = diffuse;
+				obj->_specular = specular;
+				obj->_emission = emission;
                                 obj->_shininess = shininess ;
                                 obj->_transform = transfstack.top() ;
                                 objects.push_back(obj);

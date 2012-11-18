@@ -47,20 +47,23 @@ static enum {view, translate, scale} transop ; // which operation to transform
 EXTERN float sx, sy ; // the scale in x and y
 EXTERN float tx, ty ; // the translation in x and y
 
-// Lighting parameter array, similar to that in the fragment shader
-const int numLights = 10 ;
-EXTERN GLfloat lightposn [4*numLights] ; // Light Positions
-EXTERN GLfloat lightcolor[4*numLights] ; // Light Colors
-EXTERN GLfloat lightransf[4*numLights] ; // Lights transformed by modelview
-EXTERN int numused ;                     // How many lights are used
-EXTERN GLfloat attenuation[3] ;
-EXTERN GLfloat ambient[4] ;
+EXTERN std::vector<glm::vec4> lightposn ;
+EXTERN std::vector<glm::vec4> lightcolor ;
+EXTERN std::vector<glm::vec4> lighttrasnf ;
+EXTERN vec3 attenuation ;
+EXTERN glm::vec4 ambient ;
 
 // Materials (read from file)
 // With multiple objects, these are colors for each.
+/*
 EXTERN GLfloat diffuse[4] ;
 EXTERN GLfloat specular[4] ;
 EXTERN GLfloat emission[4] ;
+EXTERN GLfloat shininess ;
+*/
+EXTERN glm::vec4 diffuse ;
+EXTERN glm::vec4 specular ;
+EXTERN glm::vec4 emission ;
 EXTERN GLfloat shininess ;
 
 // For multiple objects, read from a file.
