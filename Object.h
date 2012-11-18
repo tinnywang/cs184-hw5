@@ -18,6 +18,7 @@ public:
   virtual vec3 getNormal(vec3 ray) {};
 
   shape _type ;
+  vec4 _ambient;
   vec4 _diffuse ;
   vec4 _specular ;
   vec4 _emission ;

@@ -6,7 +6,6 @@
 #include "variables.h"
 #include "Raytrace.h"
 
-
 void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap) {
   //std::cout << objects[0]->transform[2][1] << "\n";
   for (float i = 0; i < height; i++) {
@@ -14,7 +13,7 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
       glm::vec3 ray_direction = calculateRay(eye, center, up, fovx, fovy, width, height, i+.5, j+.5);
       float min_distance = std::numeric_limits<float>::max();
       Object* i_obj;
-      glm::vec3 intersect;   // idk if u need this
+      glm::vec3 intersection;   // idk if u need this
       for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
         std::pair<bool, glm::vec3> result = (*it)->intersect(eye, ray_direction);
         if(result.first) {
@@ -23,15 +22,16 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
           if (dist < min_distance) {
             min_distance = dist;
             i_obj = *it;
-            intersect = result.second;
+            intersection = result.second;
           }
         }
       }
       if (min_distance != std::numeric_limits<float>::max()) {
-        RGBQUAD color;
-        color.rgbRed = 255 * (i_obj)->_diffuse[0];
-        color.rgbGreen = 255 * (i_obj)->_diffuse[1];
-        color.rgbBlue = 255 * (i_obj)->_diffuse[2];
+        vec4 phongColor = calculateColor(i_obj, intersection);
+	RGBQUAD color;
+        color.rgbRed = 255 * phongColor.x;
+        color.rgbGreen = 255 * phongColor.y;
+        color.rgbBlue = 255 * phongColor.z;
         FreeImage_SetPixelColor(bitmap, j, height - i - 1, &color);
       }
     }
@@ -47,4 +47,52 @@ glm::vec3 Raytrace::calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, 
   float a = glm::tan(glm::radians(fovx/2)) * ((j-(static_cast<float>(width)/2))/(static_cast<float>(width)/2));
   float b = glm::tan(glm::radians(fovy/2)) * (((static_cast<float>(height)/2)-i)/(static_cast<float>(height)/2));
   return glm::normalize(a*u + b*v - w);
+}
+
+glm::vec4 phongIllumination(vec3 normal, vec3 direction, vec3 halfAngle, vec4 lightcolor, float distance) {
+  float nDotL = glm::dot(normal, direction);
+  if (nDotL < 0) {
+    nDotL = 0;
+  }
+  vec4 diffuseTerm = glm::vec4(diffuse.x * nDotL, diffuse.y * nDotL, diffuse.z * nDotL, diffuse.w * nDotL);
+  float nDotH = glm::dot(normal, halfAngle);
+  if (nDotH < 0) {
+    nDotH = 0;
+  }
+  float shine = glm::pow(nDotH, shininess);
+  vec4 specularTerm = glm::vec4(specular.x * shine, specular.y * shine, specular.z * shine, specular.w * shine);
+  return (lightcolor / (attenuation.x + attenuation.y * distance + attenuation.z * distance * distance)) * (diffuseTerm + specularTerm);
+}
+
+glm::vec4 Raytrace::calculateColor(Object * obj, vec3& ray) {
+  vec4 finalcolor = vec4(0, 0, 0, 0);
+  vec3 eyedir = glm::normalize(-ray);
+  vec3 normal = obj->getNormal(ray);
+  vec3 direction, halfAngle, difference;
+  float distance;
+
+  for (int i = 0; i < lightposn.size(); i++) {
+    vec4 color = lightcolor[i];
+    vec4 lightpos = lightposn[i];
+    if (lightpos.w == 0) {
+      vec3 temp = glm::vec3(lightpos.x, lightpos.y, lightpos.z);
+      direction = glm::normalize(temp);
+      halfAngle = glm::normalize(direction + eyedir);
+      difference = temp - ray;
+    } else {
+      vec3 position = glm::vec3(lightpos.x/lightpos.w, lightpos.y/lightpos.w, lightpos.z/lightpos.w);
+      direction = glm::normalize(position - ray);
+      halfAngle = glm::normalize(direction + eyedir);
+      difference = position - ray;
+    }
+    if (obj->transformed) {
+      //direction = direction * obj->transform;
+      //halfAngle = halfAngle * obj->transform;
+      //difference = difference * obj->transform;
+    }
+    distance = glm::sqrt(glm::dot(difference, difference));
+    finalcolor += phongIllumination(normal, direction, halfAngle, color, distance);
+  }
+  finalcolor += obj->_ambient + obj->_emission;
+  return finalcolor;
 }

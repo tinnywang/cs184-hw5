@@ -57,7 +57,7 @@ std::pair<bool,vec3> Triangle::intersect(vec3 origin, vec3 direction) {
 
 vec3 Triangle::getNormal(vec3 ray) {
   vec3 normal;
-  if (_type == trinorm) {
+  if (_type == tri) {
     normal = _facenormal;
   } else {
     vec3 temp1 = (_vertices[0] * (ray.y - _vertices[1].y) + _vertices[1] * (_vertices[0].y - ray.y))/(_vertices[0].y - _vertices[1].y);

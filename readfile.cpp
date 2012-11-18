@@ -193,12 +193,10 @@ void readfile(const char * filename) {
                             validinput = readvals(s, 4, values);
                             if (validinput) {
                                 Sphere* obj = new Sphere(values[0], values[1], values[2], values[3]);
-                                for (i = 0 ; i < 4 ; i++) {
-                                  obj->_ambient[i] = ambient[i] ;
-                                  obj->_diffuse[i] = diffuse[i] ;
-                                  obj->_specular[i] = specular[i] ;
-                                  obj->_emission[i] = emission[i] ;
-                                }
+                                obj->_ambient = ambient ;
+                                obj->_diffuse = diffuse ;
+                                obj->_specular = specular ;
+                                obj->_emission = emission ;
                                 obj->_shininess = shininess ;
                                 obj->transform = transfstack.top() ;
                                 objects.push_back(obj);

@@ -28,13 +28,8 @@ void saveScreenshot(FIBITMAP* img, string fname) {
 }
 
 void init() {
-    attenuation[0] = 1;
-    attenuation[1] = 0;
-    attenuation[2] = 0;
-    ambient[0] = 0.2;
-    ambient[1] = 0.2;
-    ambient[2] = 0.2;
-    ambient[3] = 1;
+    attenuation = glm::vec3(1, 0, 0);
+    ambient = glm::vec4(0.2, 0.2, 0.2, 1);
 }
 
 int main(int argc, char* argv[]) {
@@ -51,6 +46,12 @@ int main(int argc, char* argv[]) {
 
     FIBITMAP* bitmap = FreeImage_Allocate(w, h, bpp);
     float fovx = fovy * static_cast<float>(w)/h;
+
+    // transform lights by modelview matrix
+    mat4 modelview = Transform::lookAt(eyeinit, center, upinit);
+    for (int i = 0; i < lightposn.size(); i++) {
+      lightposn[i] = lightposn[i] * modelview;
+    }
 
     Raytrace rt;
     rt.raytrace(eye, center, up, fovx, fovy, w, h, bitmap);
