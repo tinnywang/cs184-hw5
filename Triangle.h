@@ -16,6 +16,7 @@ public:
 
   virtual std::pair<bool,vec3> intersect(vec3 eye, vec3 direction);
   void calculateTransform(void);
+  vec3 getNormal(vec3 ray);
   
 private:
   vec3 _vertices[3];
@@ -23,6 +24,7 @@ private:
   bool _normal;
   vec3 _t_vertices[3];
   vec3 _t_normals[3];
+  vec3 _facenormal;
 };
 
 #endif

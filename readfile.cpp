@@ -200,7 +200,7 @@ void readfile(const char * filename) {
                                   obj->_emission[i] = emission[i] ;
                                 }
                                 obj->_shininess = shininess ;
-                                obj->_transform = transfstack.top() ;
+                                obj->transform = transfstack.top() ;
                                 objects.push_back(obj);
                             }
                         } else if (cmd == "tri") {
@@ -212,7 +212,7 @@ void readfile(const char * filename) {
 				obj->_specular = specular;
 				obj->_emission = emission;
                                 obj->_shininess = shininess ;
-                                obj->_transform = transfstack.top() ;
+                                obj->transform = transfstack.top() ;
                                 objects.push_back(obj);
                             }
                         } else if (cmd == "trinormal") {
@@ -225,7 +225,7 @@ void readfile(const char * filename) {
 				obj->_specular = specular;
 				obj->_emission = emission;
                                 obj->_shininess = shininess ;
-                                obj->_transform = transfstack.top() ;
+                                obj->transform = transfstack.top() ;
                                 objects.push_back(obj);
                             }
                         }

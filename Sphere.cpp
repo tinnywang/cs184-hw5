@@ -11,8 +11,8 @@ Sphere::Sphere(GLfloat pos1, GLfloat pos2, GLfloat pos3, GLfloat rad) {
 std::pair<bool,vec3> Sphere::intersect(vec3 origin, vec3 direction) {
   glm::vec4 homo_origin = glm::vec4(origin[0], origin[1], origin[2], 1);
   glm::vec4 homo_direction = glm::vec4(direction[0], direction[1], direction[2], 0);
-  homo_origin = homo_origin * glm::inverse(_transform);
-  homo_direction = homo_direction * glm::inverse(_transform);
+  homo_origin = homo_origin * glm::inverse(transform);
+  homo_direction = homo_direction * glm::inverse(transform);
   origin = glm::vec3(homo_origin[0]/homo_origin[3], homo_origin[1]/homo_origin[3], homo_origin[2]/homo_origin[3]);
   direction = glm::vec3(homo_direction[0], homo_direction[1], homo_direction[2]);
   
@@ -41,7 +41,18 @@ std::pair<bool,vec3> Sphere::intersect(vec3 origin, vec3 direction) {
   }
   glm::vec3 intersect = origin + direction * t;
   glm::vec4 homo_inter = glm::vec4(intersect[0], intersect[1], intersect[2], 1);
-  homo_inter = homo_inter * _transform;
+  homo_inter = homo_inter * transform;
   intersect = glm::vec3(homo_inter[0]/homo_inter[3], homo_inter[1]/homo_inter[3], homo_inter[2]/homo_inter[3]);
   return std::make_pair(true, intersect);
+}
+
+vec3 Sphere::getNormal(vec3 ray) {
+  vec3 center = vec3(_position[0], _position[1], _position[2]);
+  vec3 normal = glm::normalize(ray - center);
+  if (transformed) {
+    vec4 homo_normal = glm::normalize(vec4(normal.x, normal.y, normal.z, 1) * glm::transpose(glm::inverse(transform)));
+    return vec3(homo_normal.x, homo_normal.y, homo_normal.z);
+  } else {
+    return normal;
+  }
 }

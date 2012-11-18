@@ -1,4 +1,4 @@
-  #include "Triangle.h"
+#include "Triangle.h"
 #include <iostream>
 
 Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3, vec3 norm1, vec3 norm2, vec3 norm3) {
@@ -9,7 +9,7 @@ Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3, vec3 norm1, vec3 norm2, v
   _normals[1] = norm2;
   _normals[2] = norm3;
   _normal = true;
-  _type = tri;
+  _type = trinorm;
 }
 Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3) {
   _vertices[0] = vert1;
@@ -17,19 +17,21 @@ Triangle::Triangle(vec3 vert1, vec3 vert2, vec3 vert3) {
   _vertices[2] = vert3;
   _normal = false;
   _type = tri;
+  _facenormal = glm::normalize(glm::cross(vert2 - vert1, vert3 - vert1));
+  
 }
 
 // Note that this way of doing transformations is not the same as in lecture but this way is faster ONLY when we generate pictures. Can't handle animation because we calculate only once.
 void Triangle::calculateTransform(void) {
-  if (!_transformed) {
+  if (!transformed) {
     for (int i = 0; i < 3; ++i) {
       glm::vec3 point = _vertices[i];
       glm::vec4 homo_vec = glm::vec4(point[0], point[1], point[2], 1);
-      homo_vec = homo_vec * _transform;
+      homo_vec = homo_vec * transform;
       _t_vertices[i] = glm::vec3(homo_vec[0] / homo_vec[3], homo_vec[1] / homo_vec[3], homo_vec[2] / homo_vec[3]);
     }
     if (_normal) {
-      glm::mat4 inverse_transpose = glm::transpose(glm::inverse(_transform));
+      glm::mat4 inverse_transpose = glm::transpose(glm::inverse(transform));
       for (int i = 0; i < 3; ++i) {
         glm::vec3 normal = _normals[i];
         glm::vec4 homo_norm = glm::vec4(normal[0], normal[1], normal[2], 1);
@@ -37,7 +39,7 @@ void Triangle::calculateTransform(void) {
         _t_normals[i] = glm::vec3(homo_norm[0] / homo_norm[3], homo_norm[1] / homo_norm[3], homo_norm[2] / homo_norm[3]);
       }
     }
-    _transformed = true;
+    transformed = true;
   }
 }
 
@@ -52,3 +54,21 @@ std::pair<bool,vec3> Triangle::intersect(vec3 origin, vec3 direction) {
 	     glm::dot(glm::cross(p0 - p2, ray - p2), normal) >= 0;
   return std::make_pair(hit, ray);
 }
+
+vec3 Triangle::getNormal(vec3 ray) {
+  vec3 normal;
+  if (_type == trinorm) {
+    normal = _facenormal;
+  } else {
+    vec3 temp1 = (_vertices[0] * (ray.y - _vertices[1].y) + _vertices[1] * (_vertices[0].y - ray.y))/(_vertices[0].y - _vertices[1].y);
+    vec3 temp2 = (_vertices[0] * (ray.y - _vertices[2].y) + _vertices[2] * (_vertices[0].y - ray.y))/(_vertices[0].y - _vertices[2].y);
+    normal = (temp1 * (temp2.x - ray.x) + temp2 * (ray.x - temp1.x - temp1.x))/(temp2.x - temp1.x);
+  }
+  if (transformed) {
+    vec4 homo_normal = glm::normalize(vec4(normal.x, normal.y, normal.z, 1) * glm::transpose(glm::inverse(transform)));
+    return glm::vec3(homo_normal.x, homo_normal.y, homo_normal.z);
+  } else {
+    return normal;
+  }
+}
+
