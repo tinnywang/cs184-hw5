@@ -74,25 +74,58 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection) {
     vec3 normal = obj->getNormal(intersection);
     vec3 direction, halfAngle, difference;
     float distance;
+    float increment = .001;
 
     for (int i = 0; i < lightposn.size(); i++) {
-        vec4 color = lightcolor[i];
+        // shadow
+        bool shadow = false;
         vec4 lightpos = lightposn[i];
         if (lightpos.w == 0) {
-            vec3 temp = glm::vec3(lightpos.x, lightpos.y, lightpos.z);
-            direction = glm::normalize(temp);
-            halfAngle = glm::normalize(direction + eyedir);
-            distance = 0;
+          direction = glm::normalize(glm::vec3(lightpos[0],lightpos[1],lightpos[2]));
+          vec3 temp_inter = intersection + increment * direction;
+          for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+            std::pair<bool, glm::vec3> result = (*it)->intersect(temp_inter, direction);
+            if (result.first && glm::dot(normal, direction) >= 0) {              
+              shadow = true;
+              break;
+            }
+          }
+          if (shadow) {
+            continue;
+          }
+          halfAngle = glm::normalize(direction + eyedir);
+          distance = 0;
         } else {
-            vec3 position = glm::vec3(lightpos.x/lightpos.w, lightpos.y/lightpos.w, lightpos.z/lightpos.w);
-            direction = glm::normalize(position - intersection);
-            halfAngle = glm::normalize(direction + eyedir);
-            difference = position - intersection;
-            distance = glm::sqrt(glm::dot(difference, difference));
+          vec3 dir_vec = glm::vec3(lightpos[0] - intersection.x,
+                                   lightpos[1] - intersection.y,
+                                   lightpos[2] - intersection.z);
+          direction = glm::normalize(dir_vec);
+          vec3 temp_inter = intersection + increment * direction;
+          float true_dist = glm::dot(dir_vec,dir_vec);
+          for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+            std::pair<bool, glm::vec3> result = (*it)->intersect(temp_inter, direction);
+            if (result.first && glm::dot(normal, direction) >= 0) {
+              vec3 diff_vec = glm::vec3(result.second.x - temp_inter.x,
+                                        result.second.y - temp_inter.y,
+                                        result.second.z - temp_inter.z);
+              float diff_dist = glm::dot(diff_vec, diff_vec);
+              if (diff_dist < true_dist) {
+                shadow = true;
+                break;
+              }
+            }
+          }
+          if (shadow) {
+            continue;
+          }
+          halfAngle = glm::normalize(direction + eyedir);
+          distance = true_dist;
         }
+        vec4 color = lightcolor[i];
         finalcolor += phongIllumination(normal, direction, halfAngle, color, distance);
     }
     finalcolor += obj->_ambient + obj->_emission;
-    return finalcolor;
+    return glm::vec4(std::min(finalcolor[0],static_cast<float>(1)), std::min(finalcolor[1],static_cast<float>(1)),
+                     std::min(finalcolor[2],static_cast<float>(1)), std::min(finalcolor[3],static_cast<float>(1)));
 }
 

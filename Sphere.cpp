@@ -1,4 +1,5 @@
 #include "Sphere.h"
+#include <iostream>
 
 Sphere::Sphere(GLfloat pos1, GLfloat pos2, GLfloat pos3, GLfloat rad) {
     _position[0] = pos1;
@@ -28,6 +29,7 @@ std::pair<bool,vec3> Sphere::intersect(vec3 origin, vec3 direction) {
     }
     GLfloat root1 = (-b + glm::sqrt(discriminant))/(2 * a);
     GLfloat root2 = (-b - glm::sqrt(discriminant))/(2 * a);
+      
     if (root1 > 0 && root2 > 0) {
         t = glm::min(root1, root2);
     } else if (root1 == root2) {

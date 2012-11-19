@@ -13,7 +13,7 @@ public:
 	virtual ~Raytrace() {};
 	void raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap);
 	glm::vec3 calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, float i, float j);
-	glm::vec4 calculateColor(Object * obj, const vec3& eyedir);
+	glm::vec4 calculateColor(Object * obj, const vec3& intersect);
 };
 
 #endif
