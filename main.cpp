@@ -47,20 +47,14 @@ int main(int argc, char* argv[]) {
     FIBITMAP* bitmap = FreeImage_Allocate(w, h, bpp);
     float fovx = fovy * static_cast<float>(w)/h;
 
-    // transform lights by modelview matrix
-    mat4 modelview = Transform::lookAt(eyeinit, center, upinit);
-    for (int i = 0; i < lightposn.size(); i++) {
-      lightposn[i] = lightposn[i] * modelview;
-    }
-
     Raytrace rt;
     rt.raytrace(eye, center, up, fovx, fovy, w, h, bitmap);
 
     saveScreenshot(bitmap, output);
     FreeImage_DeInitialise();
-    
+
     for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-      delete *it;
+        delete *it;
     }
     return 0;
 }

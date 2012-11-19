@@ -85,21 +85,21 @@ void readfile(const char * filename) {
                 bool validinput ; // validity of input
 
                 // Lights
-		if (cmd == "directional" || cmd == "point") {
-		    validinput = readvals(s, 6, values);
-		    if (validinput) {
-			if (cmd == "directional") {
-			    lightposn.push_back(glm::vec4(values[0], values[1], values[2], 0));
-			} else {
-			    lightposn.push_back(glm::vec4(values[0], values[1], values[2], 1));
-			}
-			lightcolor.push_back(glm::vec4(values[3], values[4], values[5], 1));
-		    }
+                if (cmd == "directional" || cmd == "point") {
+                    validinput = readvals(s, 6, values);
+                    if (validinput) {
+                        if (cmd == "directional") {
+                            lightposn.push_back(glm::vec4(values[0], values[1], values[2], 0));
+                        } else {
+                            lightposn.push_back(glm::vec4(values[0], values[1], values[2], 1));
+                        }
+                        lightcolor.push_back(glm::vec4(values[3], values[4], values[5], 1));
+                    }
                 } else if (cmd == "attenuation") {
                     validinput = readvals(s, 3, values);
                     if (validinput) {
-			attenuation = glm::vec3(values[0], values[1], values[2]);
-		    }
+                        attenuation = glm::vec3(values[0], values[1], values[2]);
+                    }
                 } else if (cmd == "ambient") {
                     validinput = readvals(s, 3, values) ; // colors
                     if (validinput) {
@@ -110,7 +110,7 @@ void readfile(const char * filename) {
                 else if (cmd == "diffuse") {
                     validinput = readvals(s, 3, values) ;
                     if (validinput) {
-			diffuse = glm::vec4(values[0], values[1], values[2], 1);
+                        diffuse = glm::vec4(values[0], values[1], values[2], 1);
                     }
                 }
                 else if (cmd == "specular") {
@@ -122,7 +122,7 @@ void readfile(const char * filename) {
                 else if (cmd == "emission") {
                     validinput = readvals(s, 3, values) ;
                     if (validinput) {
-			emission = glm::vec4(values[0], values[1], values[2], 1);
+                        emission = glm::vec4(values[0], values[1], values[2], 1);
                     }
                 }
                 else if (cmd == "shininess") {
@@ -206,9 +206,9 @@ void readfile(const char * filename) {
                             if (validinput) {
                                 Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]]);
                                 obj->_ambient = ambient;
-				obj->_diffuse = diffuse;
-				obj->_specular = specular;
-				obj->_emission = emission;
+                                obj->_diffuse = diffuse;
+                                obj->_specular = specular;
+                                obj->_emission = emission;
                                 obj->_shininess = shininess ;
                                 obj->transform = transfstack.top() ;
                                 objects.push_back(obj);
@@ -218,10 +218,10 @@ void readfile(const char * filename) {
                             if (validinput) {
                                 Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]],
                                                              normals[values[0]], normals[values[1]], normals[values[2]]);
-				obj->_ambient = ambient;
-				obj->_diffuse = diffuse;
-				obj->_specular = specular;
-				obj->_emission = emission;
+                                obj->_ambient = ambient;
+                                obj->_diffuse = diffuse;
+                                obj->_specular = specular;
+                                obj->_emission = emission;
                                 obj->_shininess = shininess ;
                                 obj->transform = transfstack.top() ;
                                 objects.push_back(obj);
