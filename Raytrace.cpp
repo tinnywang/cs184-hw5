@@ -28,10 +28,10 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
       }
       if (min_distance != std::numeric_limits<float>::max()) {
         vec4 phongColor = calculateColor(i_obj, intersection);
-	RGBQUAD color;
-        color.rgbRed = 255 * phongColor.x;
+	      RGBQUAD color;
+        color.rgbBlue = 255 * phongColor.x;
         color.rgbGreen = 255 * phongColor.y;
-        color.rgbBlue = 255 * phongColor.z;
+        color.rgbRed = 255 * phongColor.z;
         FreeImage_SetPixelColor(bitmap, j, height - i - 1, &color);
       }
     }
@@ -64,10 +64,10 @@ glm::vec4 phongIllumination(vec3 normal, vec3 direction, vec3 halfAngle, vec4 li
   return (lightcolor / (attenuation.x + attenuation.y * distance + attenuation.z * distance * distance)) * (diffuseTerm + specularTerm);
 }
 
-glm::vec4 Raytrace::calculateColor(Object * obj, vec3& ray) {
+glm::vec4 Raytrace::calculateColor(Object * obj, vec3& intersection) {
   vec4 finalcolor = vec4(0, 0, 0, 0);
-  vec3 eyedir = glm::normalize(-ray);
-  vec3 normal = obj->getNormal(ray);
+  vec3 eyedir = glm::normalize(eye-intersection);
+  vec3 normal = obj->getNormal(intersection);
   vec3 direction, halfAngle, difference;
   float distance;
 
@@ -85,11 +85,9 @@ glm::vec4 Raytrace::calculateColor(Object * obj, vec3& ray) {
       halfAngle = glm::normalize(direction + eyedir);
       difference = position - ray;
     }
-    if (obj->transformed) {
       //direction = direction * obj->transform;
       //halfAngle = halfAngle * obj->transform;
       //difference = difference * obj->transform;
-    }
     distance = glm::sqrt(glm::dot(difference, difference));
     finalcolor += phongIllumination(normal, direction, halfAngle, color, distance);
   }
