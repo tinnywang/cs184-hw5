@@ -6,7 +6,7 @@
 #include "variables.h"
 #include "Raytrace.h"
 
-void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap) {
+void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap, int recurse) {
     //std::cout << objects[0]->transform[2][1] << "\n";
     for (float i = 0; i < height; i++) {
         for (float j = 0; j < width; j++) {
@@ -27,7 +27,7 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
                 }
             }
             if (min_distance != std::numeric_limits<float>::max()) {
-                vec4 phongColor = calculateColor(i_obj, intersection);
+                vec4 phongColor = calculateColor(i_obj, intersection, recurse);
                 RGBQUAD color;
                 color.rgbBlue = 255 * phongColor.x;
                 color.rgbGreen = 255 * phongColor.y;
@@ -68,7 +68,7 @@ glm::vec4 phongIllumination(vec3 normal, vec3 direction, vec3 halfAngle, vec4 li
     }
 }
 
-glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection) {
+glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, int recurse) {
     vec4 finalcolor = vec4(0, 0, 0, 0);
     vec3 eyedir = glm::normalize(eye-intersection);
     vec3 normal = obj->getNormal(intersection);
@@ -125,6 +125,31 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection) {
         finalcolor += phongIllumination(normal, direction, halfAngle, color, distance);
     }
     finalcolor += obj->_ambient + obj->_emission;
+    
+    if (recurse != 0) {  // This is for reflection
+      float times = 2 * glm::dot(eyedir, normal);
+      vec3 reflection_direction = glm::normalize((times * normal) - eyedir);
+      float min_distance = std::numeric_limits<float>::max();
+      Object* i_obj;
+      glm::vec3 intersec;   // idk if u need this
+      vec3 temp_start = intersection + increment * reflection_direction;
+      
+      for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+          std::pair<bool, glm::vec3> result = (*it)->intersect(temp_start, reflection_direction);
+          if(result.first) {
+              glm::vec3 diff = result.second - eye;
+              float dist = glm::dot(diff, diff);
+              if (dist < min_distance) {
+                  min_distance = dist;
+                  i_obj = *it;
+                  intersec = result.second;
+              }
+          }
+      }
+      if (min_distance != std::numeric_limits<float>::max()) {
+        finalcolor += specular * calculateColor(i_obj, intersec, recurse - 1); 
+      }
+    }
     return glm::vec4(std::min(finalcolor[0],static_cast<float>(1)), std::min(finalcolor[1],static_cast<float>(1)),
                      std::min(finalcolor[2],static_cast<float>(1)), std::min(finalcolor[3],static_cast<float>(1)));
 }

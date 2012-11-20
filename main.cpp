@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
     float fovx = fovy * static_cast<float>(w)/h;
 
     Raytrace rt;
-    rt.raytrace(eye, center, up, fovx, fovy, w, h, bitmap);
+    rt.raytrace(eye, center, up, fovx, fovy, w, h, bitmap, depth);
 
     saveScreenshot(bitmap, output);
     FreeImage_DeInitialise();
