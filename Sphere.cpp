@@ -57,6 +57,6 @@ vec3 Sphere::getNormal(vec3 intersect) {
     glm::vec3 center = glm::vec3(homo_center[0]/homo_center[3], homo_center[1]/homo_center[3], homo_center[2]/homo_center[3]);
 
     vec3 normal = glm::normalize(intersect - center);
-    vec4 homo_normal = glm::normalize(vec4(normal.x, normal.y, normal.z, 0) * glm::transpose(glm::inverse(transform)));
-    return vec3(homo_normal.x, homo_normal.y, homo_normal.z);
+    vec4 homo_normal = vec4(normal.x, normal.y, normal.z, 0) * glm::transpose(glm::inverse(transform));
+    return glm::normalize(vec3(homo_normal.x, homo_normal.y, homo_normal.z));
 }

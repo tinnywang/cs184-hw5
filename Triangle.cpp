@@ -34,7 +34,7 @@ void Triangle::calculateTransform(void) {
             glm::vec3 normal = _normals[i];            
             glm::vec4 homo_norm = glm::vec4(normal[0], normal[1], normal[2], 0);
             homo_norm = homo_norm * inverse_transpose;
-            _t_normals[i] = glm::vec3(homo_norm[0], homo_norm[1], homo_norm[2]);
+            _t_normals[i] = glm::normalize(glm::vec3(homo_norm[0], homo_norm[1], homo_norm[2]));
         }
         transformed = true;
     }
@@ -54,7 +54,6 @@ std::pair<bool,vec3> Triangle::intersect(vec3 origin, vec3 direction) {
     } else {
       return std::make_pair(false, direction);
     }
-
 }
 
 vec3 Triangle::getNormal(vec3 intersect) {

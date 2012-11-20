@@ -49,18 +49,18 @@ glm::vec3 Raytrace::calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, 
     return glm::normalize(a*u + b*v - w);
 }
 
-glm::vec4 phongIllumination(vec3 normal, vec3 direction, vec3 halfAngle, vec4 lightcolor, float distance) {
+glm::vec4 phongIllumination(vec3 normal, vec3 direction, vec3 halfAngle, vec4 lightcolor, float distance, vec4 obj_diffuse, vec4 obj_specular, GLfloat obj_shininess) {
     float nDotL = glm::dot(normal, direction);
     if (nDotL < 0) {
         nDotL = 0;
     }
-    vec4 diffuseTerm = glm::vec4(diffuse.x * nDotL, diffuse.y * nDotL, diffuse.z * nDotL, diffuse.w * nDotL);
+    vec4 diffuseTerm = glm::vec4(obj_diffuse.x * nDotL, obj_diffuse.y * nDotL, obj_diffuse.z * nDotL, obj_diffuse.w * nDotL);
     float nDotH = glm::dot(normal, halfAngle);
     if (nDotH < 0) {
         nDotH = 0;
     }
-    float shine = glm::pow(nDotH, shininess);
-    vec4 specularTerm = glm::vec4(specular.x * shine, specular.y * shine, specular.z * shine, specular.w * shine);
+    float shine = glm::pow(nDotH, obj_shininess);
+    vec4 specularTerm = glm::vec4(obj_specular.x * shine, obj_specular.y * shine, obj_specular.z * shine, obj_specular.w * shine);
     if (distance == 0) {  // directional lights have no attenuation.
         return lightcolor * (diffuseTerm + specularTerm);
     } else {
@@ -122,13 +122,13 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, int r
           distance = true_dist;
         }
         vec4 color = lightcolor[i];
-        finalcolor += phongIllumination(normal, direction, halfAngle, color, distance);
+        finalcolor += phongIllumination(normal, direction, halfAngle, color, distance, obj->_diffuse, obj->_specular, obj->_shininess);
     }
     finalcolor += obj->_ambient + obj->_emission;
     
     if (recurse != 0) {  // This is for reflection
-      float times = 2 * glm::dot(eyedir, normal);
-      vec3 reflection_direction = glm::normalize((times * normal) - eyedir);
+      float times = 2 * glm::dot(-eyedir, normal);
+      vec3 reflection_direction = glm::normalize(-eyedir-(times * normal));
       float min_distance = std::numeric_limits<float>::max();
       Object* i_obj;
       glm::vec3 intersec;   // idk if u need this
@@ -137,7 +137,7 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, int r
       for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
           std::pair<bool, glm::vec3> result = (*it)->intersect(temp_start, reflection_direction);
           if(result.first) {
-              glm::vec3 diff = result.second - eye;
+              glm::vec3 diff = result.second - temp_start;
               float dist = glm::dot(diff, diff);
               if (dist < min_distance) {
                   min_distance = dist;
@@ -147,7 +147,7 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, int r
           }
       }
       if (min_distance != std::numeric_limits<float>::max()) {
-        finalcolor += specular * calculateColor(i_obj, intersec, recurse - 1); 
+        finalcolor += obj->_specular * calculateColor(i_obj, intersec, recurse - 1); 
       }
     }
     return glm::vec4(std::min(finalcolor[0],static_cast<float>(1)), std::min(finalcolor[1],static_cast<float>(1)),

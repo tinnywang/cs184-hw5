@@ -43,7 +43,6 @@ int main(int argc, char* argv[]) {
     init();
     output = "temp.png";
     readfile(argv[1]) ;
-
     FIBITMAP* bitmap = FreeImage_Allocate(w, h, bpp);
     float fovx = fovy * static_cast<float>(w)/h;
 

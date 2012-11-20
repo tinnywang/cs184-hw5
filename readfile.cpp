@@ -89,9 +89,13 @@ void readfile(const char * filename) {
                     validinput = readvals(s, 6, values);
                     if (validinput) {
                         if (cmd == "directional") {
-                            lightposn.push_back(glm::vec4(values[0], values[1], values[2], 0));
+                            glm::vec4 position = glm::vec4(values[0], values[1], values[2], 0);
+                            position = position * transfstack.top();
+                            lightposn.push_back(glm::vec4(position.x, position.y, position.z, 0));
                         } else {
-                            lightposn.push_back(glm::vec4(values[0], values[1], values[2], 1));
+                            glm::vec4 position = glm::vec4(values[0], values[1], values[2], 1);
+                            position = position * transfstack.top();                            
+                            lightposn.push_back(glm::vec4(position.x/position.w, position.y/position.w, position.z/position.w, 1));
                         }
                         lightcolor.push_back(glm::vec4(values[3], values[4], values[5], 1));
                     }
@@ -193,7 +197,7 @@ void readfile(const char * filename) {
                             validinput = readvals(s, 4, values);
                             if (validinput) {
                                 Sphere* obj = new Sphere(values[0], values[1], values[2], values[3]);
-                                obj->_ambient = ambient ;
+                                obj->_ambient = ambient;
                                 obj->_diffuse = diffuse ;
                                 obj->_specular = specular ;
                                 obj->_emission = emission ;
