@@ -40,7 +40,7 @@ void Triangle::calculateTransform(void) {
     }
 }
 
-std::pair<bool,vec3> Triangle::intersect(vec3 origin, vec3 direction) {
+std::pair<bool,vec3> Triangle::intersect(const vec3& origin, const vec3& direction) {
     calculateTransform();
     vec3 p0 = _t_vertices[0], p1 = _t_vertices[1], p2 = _t_vertices[2];
     vec3 normal = glm::normalize(glm::cross(p1 - p0, p2 - p0));
@@ -56,7 +56,7 @@ std::pair<bool,vec3> Triangle::intersect(vec3 origin, vec3 direction) {
     }
 }
 
-vec3 Triangle::getNormal(vec3 intersect) {
+vec3 Triangle::getNormal(const vec3& intersect) {
     if (!transformed) {
         calculateTransform();
     }

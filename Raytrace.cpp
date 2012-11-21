@@ -6,7 +6,7 @@
 #include "variables.h"
 #include "Raytrace.h"
 
-void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap, int recurse) {
+void Raytrace::raytrace (const vec3& eye, const vec3& center, const vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap, int recurse) {
     //std::cout << objects[0]->transform[2][1] << "\n";
     int count = 0;
     for (float i = 0; i < height; i++) {
@@ -42,7 +42,7 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
 
 
 // returns the direction of the ray
-glm::vec3 Raytrace::calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, float i, float j) {
+glm::vec3 Raytrace::calculateRay(const vec3& eye, const vec3& center, const vec3& up, float fovx, float fovy, int width, int height, float i, float j) {
     vec3 w = glm::normalize(eye - center);
     vec3 u = glm::normalize(glm::cross(up, w));
     vec3 v = glm::cross(w, u);
@@ -51,7 +51,7 @@ glm::vec3 Raytrace::calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, 
     return glm::normalize(a*u + b*v - w);
 }
 
-glm::vec4 phongIllumination(vec3 normal, vec3 direction, vec3 halfAngle, vec4 lightcolor, float distance, vec4 obj_diffuse, vec4 obj_specular, GLfloat obj_shininess) {
+glm::vec4 phongIllumination(const vec3& normal, const vec3& direction, const vec3& halfAngle, const vec4& lightcolor, float distance, const vec4& obj_diffuse, const vec4& obj_specular, GLfloat obj_shininess) {
     float nDotL = glm::dot(normal, direction);
     if (nDotL < 0) {
         nDotL = 0;
@@ -70,11 +70,11 @@ glm::vec4 phongIllumination(vec3 normal, vec3 direction, vec3 halfAngle, vec4 li
     }
 }
 
-glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, vec3 eye, int recurse) {
+glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, const vec3& eye, int recurse) {
     vec4 finalcolor = vec4(0, 0, 0, 0);
     vec3 eyedir = glm::normalize(eye-intersection);
     vec3 normal = obj->getNormal(intersection);
-    vec3 direction, halfAngle, difference;
+    vec3 direction, halfAngle;
     float distance;
     float increment = .001;
 

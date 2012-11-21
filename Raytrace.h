@@ -11,9 +11,9 @@ class Raytrace
 public:
 	Raytrace() {};
 	virtual ~Raytrace() {};
-	void raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap, int depth);
-	glm::vec3 calculateRay(vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, float i, float j);
-	glm::vec4 calculateColor(Object * obj, const vec3& intersect, vec3 eye, int recurse);
+	void raytrace (const vec3& eye, const vec3& center, const vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap, int depth);
+	glm::vec3 calculateRay(const vec3& eye, const vec3& center, const vec3& up, float fovx, float fovy, int width, int height, float i, float j);
+	glm::vec4 calculateColor(Object * obj, const vec3& intersect, const vec3& eye, int recurse);
 };
 
 #endif

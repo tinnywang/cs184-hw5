@@ -9,7 +9,11 @@ BoundingBox::BoundingBox(Object * obj) {
   _max = dimensions.second;
 }
 
-std::pair<bool, vec3> BoundingBox::intersect(vec3 origin, vec3 direction) {
+BoundingBox::~BoundingBox() {
+  delete _obj;
+}
+
+std::pair<bool, vec3> BoundingBox::intersect(const vec3& origin, const vec3& direction) {
     float t, inf = std::numeric_limits<float>::max();
     vec3 x = vec3(1, 0, 0), y = vec3(0, 1, 0), z = vec3(0, 0, 1), rtn = vec3(inf, inf, inf);
     vec3 intersection;
