@@ -192,7 +192,7 @@ void readfile(const char * filename) {
                             obj->_emission = emission ;
                             obj->_shininess = shininess ;
                             obj->transform = transfstack.top() ;
-                            objects.push_back(new BoundingBox(obj));
+                            boxes.push_back(new BoundingBox(obj));
                         }
                     } else if (cmd == "tri") {
                         validinput = readvals(s, 3, values);
@@ -204,7 +204,7 @@ void readfile(const char * filename) {
                             obj->_emission = emission;
                             obj->_shininess = shininess ;
                             obj->transform = transfstack.top() ;
-                            objects.push_back(new BoundingBox(obj));
+                            boxes.push_back(new BoundingBox(obj));
                         }
                     } else if (cmd == "trinormal") {
                         validinput = readvals(s, 6, values);
@@ -217,7 +217,7 @@ void readfile(const char * filename) {
                             obj->_emission = emission;
                             obj->_shininess = shininess ;
                             obj->transform = transfstack.top() ;
-                            objects.push_back(new BoundingBox(obj));
+                            boxes.push_back(new BoundingBox(obj));
                         }
                     }
                 }

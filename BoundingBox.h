@@ -11,13 +11,15 @@ class BoundingBox : public Object
 {
 public:
   BoundingBox(Object *object);
-  BoundingBox(Object *obj1, Object *obj2);
+  BoundingBox(BoundingBox* left, BoundingBox* right);
   virtual ~BoundingBox();
   virtual std::pair<bool, vec3> intersect(const vec3& origin, const vec3& direction);
-  virtual Object * getObject();
+  Object * getObject();
+  vec3 getCenter();
 
-  Object * leftObj = NULL;
-  Object * iightObj = NULL;
+  Object * _obj;    // only leaves will have this as non_null
+  BoundingBox * _left_box;
+  BoundingBox * _right_box;
 private:
   vec3 _min;
   vec3 _max;

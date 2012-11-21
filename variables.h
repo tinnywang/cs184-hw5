@@ -69,7 +69,8 @@ EXTERN GLfloat shininess ;
 
 // For multiple objects, read from a file.
 EXTERN int numobjects ;
-EXTERN std::vector<Object*> objects ;
+EXTERN std::vector<BoundingBox*> boxes ;
+EXTERN BoundingBox* root_box;
 
 // Variables for specifying geometry
 EXTERN std::vector<vec3> vertices;
