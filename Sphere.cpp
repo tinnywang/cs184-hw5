@@ -60,8 +60,49 @@ vec3 Sphere::getNormal(vec3 intersect) {
 }
 
 std::pair<vec3, vec3> Sphere::getBoundingBoxDimensions() {
+  /*
   vec3 min = glm::vec3(_position[0] - _radius, _position[1] - _radius, _position[2] - _radius);
   vec3 max = glm::vec3(_position[0] + _radius, _position[1] + _radius, _position[2] + _radius);
   return std::make_pair(min, max);
+  */
+  vec4 farBottomLeft = glm::vec4(_position[0] - _radius, _position[1] - _radius, _position[2] - _radius, 1);
+  vec4 farBottomRight = glm::vec4(_position[0] + _radius, _position[1] - _radius, _position[2] - _radius, 1);
+  vec4 nearBottomLeft = glm::vec4(_position[0] - _radius, _position[1] - _radius, _position[2] + _radius, 1);
+  vec4 nearBottomRight = glm::vec4(_position[0] + _radius, _position[1] - _radius, _position[2] + _radius, 1);
+  vec4 farTopLeft = glm::vec4(_position[0] - _radius, _position[1] + _radius, _position[2] - _radius, 1);
+  vec4 farTopRight = glm::vec4(_position[0] + _radius, _position[1] + _radius, _position[2] - _radius, 1);
+  vec4 nearTopLeft = glm::vec4(_position[0] - _radius, _position[1] + _radius, _position[2] + _radius, 1);
+  vec4 nearTopRight = glm::vec4(_position[0] + _radius, _position[1] + _radius, _position[2] + _radius, 1);
+  vec4 vertices[] = {farBottomLeft, farBottomRight, nearBottomLeft, nearBottomRight, farTopLeft, farTopRight, nearTopLeft, nearTopRight};
+  std::vector<vec3> transformedVertices;
+  for (int i = 0; i < 8; i++) {
+    vec4 t_vertex = vertices[i] * transform;
+    transformedVertices.push_back(vec3(t_vertex.x/t_vertex.w, t_vertex.y/t_vertex.w, t_vertex.z/t_vertex.w));
+  }
+  return getMaxMinVertices(transformedVertices);
 }
-  
+
+std::pair<vec3, vec3> Sphere::getMaxMinVertices(std::vector<vec3> vertices) {
+  float min_x = vertices[0].x, min_y = vertices[0].y, min_z = vertices[0].z;
+  float max_x = vertices[0].x, max_y = vertices[0].y, max_z = vertices[0].z;
+  for (int i = 1; i < vertices.size(); i++) {
+    if (vertices[i].x < min_x) {
+      min_x = vertices[i].x;
+    } else if (vertices[i].x > max_x) {
+      max_x = vertices[i].x;
+    }
+    if (vertices[i].y < min_y) {
+      min_y = vertices[i].y;
+    } else if (vertices[i].y > max_y) {
+      max_y = vertices[i].y;
+    }
+    if (vertices[i].z < min_z) {
+      min_z = vertices[i].z;
+    } else if (vertices[i].z > max_z) {
+      max_z = vertices[i].z;
+    } 
+  }
+  vec3 min = vec3(min_x, min_y, min_z);
+  vec3 max = vec3(max_x, max_y, max_z);
+  return std::make_pair(min, max);
+}
