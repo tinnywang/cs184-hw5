@@ -64,8 +64,8 @@ vec3 Triangle::getNormal(vec3 intersect) {
     if (_type == tri) {
         normal = _t_normals[0];
     } else {
-        vec3 temp1 = (_normals[0] * (intersect.y - _vertices[1].y) + _normals[1] * (_vertices[0].y - intersect.y))/(_vertices[0].y - _vertices[1].y);
-        vec3 temp2 = (_normals[0] * (intersect.y - _vertices[2].y) + _normals[2] * (_vertices[0].y - intersect.y))/(_vertices[0].y - _vertices[2].y);
+        vec3 temp1 = (_t_normals[0] * (intersect.y - _t_vertices[1].y) + _t_normals[1] * (_t_vertices[0].y - intersect.y))/(_t_vertices[0].y - _t_vertices[1].y);
+        vec3 temp2 = (_t_normals[0] * (intersect.y - _t_vertices[2].y) + _t_normals[2] * (_t_vertices[0].y - intersect.y))/(_t_vertices[0].y - _t_vertices[2].y);
         normal = (temp1 * (temp2.x - intersect.x) + temp2 * (intersect.x - temp1.x))/(temp2.x - temp1.x);
         vec4 homo_normal = glm::normalize(vec4(normal.x, normal.y, normal.z, 0) * glm::transpose(glm::inverse(transform)));
         normal = glm::normalize(glm::vec3(homo_normal.x, homo_normal.y, homo_normal.z));

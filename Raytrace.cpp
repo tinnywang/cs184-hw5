@@ -27,7 +27,7 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
                 }
             }
             if (min_distance != std::numeric_limits<float>::max()) {
-                vec4 phongColor = calculateColor(i_obj, intersection, recurse);
+                vec4 phongColor = calculateColor(i_obj, intersection, eye, recurse);
                 RGBQUAD color;
                 color.rgbBlue = 255 * phongColor.x;
                 color.rgbGreen = 255 * phongColor.y;
@@ -68,7 +68,7 @@ glm::vec4 phongIllumination(vec3 normal, vec3 direction, vec3 halfAngle, vec4 li
     }
 }
 
-glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, int recurse) {
+glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, vec3 eye, int recurse) {
     vec4 finalcolor = vec4(0, 0, 0, 0);
     vec3 eyedir = glm::normalize(eye-intersection);
     vec3 normal = obj->getNormal(intersection);
@@ -126,7 +126,7 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, int r
     }
     finalcolor += obj->_ambient + obj->_emission;
     
-    if (recurse != 0) {  // This is for reflection
+    if (recurse > 0) {  // This is for reflection
       float times = 2 * glm::dot(eyedir, normal);
       vec3 reflection_direction = glm::normalize(-eyedir+(times * normal));
       float min_distance = std::numeric_limits<float>::max();
@@ -147,7 +147,7 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, int r
           }
       }
       if (min_distance != std::numeric_limits<float>::max()) {
-        finalcolor += obj->_specular * calculateColor(i_obj, intersec, recurse - 1); 
+        finalcolor += obj->_specular * calculateColor(i_obj, intersec, intersection, recurse - 1); 
       }
     }
     return glm::vec4(std::min(finalcolor[0],static_cast<float>(1)), std::min(finalcolor[1],static_cast<float>(1)),
