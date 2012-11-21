@@ -14,7 +14,6 @@ public:
   BoundingBox(BoundingBox* left, BoundingBox* right);
   virtual ~BoundingBox();
   virtual std::pair<bool, vec3> intersect(const vec3& origin, const vec3& direction);
-  Object * getObject();
   vec3 getCenter();
 
   Object * _obj;    // only leaves will have this as non_null

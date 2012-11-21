@@ -6,29 +6,67 @@
 #include "variables.h"
 #include "Raytrace.h"
 
+namespace {
+  void getPrunnedObjs(BoundingBox* node, const vec3& source, const vec3& direction, std::vector<std::pair<Object*, vec3> > * results) {
+    std::pair<bool, glm::vec3> bb_result = node->intersect(source,direction);
+    if (bb_result.first) {
+      if (node->_left_box != NULL) {
+        if (node->_left_box->_obj != NULL) {
+          results->push_back(std::make_pair(node->_left_box->_obj, bb_result.second));
+        } else {
+          getPrunnedObjs(node->_left_box, source, direction, results);
+        }
+      }
+      if (node->_right_box != NULL) {
+        if (node->_right_box->_obj != NULL) {
+          results->push_back(std::make_pair(node->_right_box->_obj, bb_result.second));
+        } else {
+          getPrunnedObjs(node->_right_box, source, direction, results);
+        }
+      }
+    }
+  }
+  
+  std::pair<Object*, vec3> calculateIntersection(const vec3& eye, const vec3& ray_direction) {
+    float min_distance = std::numeric_limits<float>::max();
+    Object* i_obj = NULL;
+    glm::vec3 intersection;
+    std::vector<std::pair<Object*, vec3> > prunned_objects;
+    getPrunnedObjs(root_box, eye, ray_direction, &prunned_objects);
+    
+    for (std::vector<std::pair<Object*, vec3> >::iterator it = prunned_objects.begin(); it != prunned_objects.end(); ++it) {
+        if (min_distance != std::numeric_limits<float>::max()) {  // another optimization
+          glm::vec3 difference = it->second - eye;
+          float dist = glm::dot(difference, difference);
+          if (dist >= min_distance) {
+            continue;
+          }
+        }
+        std::pair<bool, glm::vec3> result = (it->first)->intersect(eye, ray_direction);
+        if (result.first) {
+            glm::vec3 difference = result.second - eye;
+            float dist = glm::dot(difference, difference);
+            if (dist < min_distance) {
+                min_distance = dist;
+                i_obj = it->first;
+                intersection = result.second;
+            }
+        }
+    }
+    return std::make_pair(i_obj, intersection);
+  }
+}
 void Raytrace::raytrace (const vec3& eye, const vec3& center, const vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap, int recurse) {
-    //std::cout << objects[0]->transform[2][1] << "\n";
     int count = 0;
     for (float i = 0; i < height; i++) {
         for (float j = 0; j < width; j++) {
             glm::vec3 ray_direction = calculateRay(eye, center, up, fovx, fovy, width, height, i+.5, j+.5);
-            float min_distance = std::numeric_limits<float>::max();
-            Object* i_obj;
-            glm::vec3 intersection;   // idk if u need this
-            for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-                std::pair<bool, glm::vec3> result = (*it)->intersect(eye, ray_direction);
-                if(result.first) {
-                    glm::vec3 difference = result.second - eye;
-                    float dist = glm::dot(difference, difference);
-                    if (dist < min_distance) {
-                        min_distance = dist;
-                        i_obj = *it;
-                        intersection = result.second;
-                    }
-                }
-            }
-            if (min_distance != std::numeric_limits<float>::max()) {
-                vec4 phongColor = calculateColor(i_obj->getObject(), intersection, eye, recurse);
+            std::pair<Object*, vec3> i_result = calculateIntersection(eye, ray_direction);
+            Object* i_obj = i_result.first;
+            glm::vec3 intersection = i_result.second; 
+            
+            if (i_obj != NULL) {
+                vec4 phongColor = calculateColor(i_obj, intersection, eye, recurse);
                 RGBQUAD color;
                 color.rgbBlue = 255 * phongColor.x;
                 color.rgbGreen = 255 * phongColor.y;
@@ -85,8 +123,11 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, const
         if (lightpos.w == 0) {
           direction = glm::normalize(glm::vec3(lightpos[0],lightpos[1],lightpos[2]));
           vec3 temp_inter = intersection + increment * direction;
-          for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-            std::pair<bool, glm::vec3> result = (*it)->intersect(temp_inter, direction);
+          std::vector<std::pair<Object*, vec3> > prunned_objects;
+          getPrunnedObjs(root_box, temp_inter, direction, &prunned_objects);
+          
+          for (std::vector<std::pair<Object*, vec3> >::iterator it = prunned_objects.begin(); it != prunned_objects.end(); ++it) {
+            std::pair<bool, glm::vec3> result = (it->first)->intersect(temp_inter, direction);
             if (result.first && glm::dot(normal, direction) >= 0) {              
               shadow = true;
               break;
@@ -104,8 +145,11 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, const
           direction = glm::normalize(dir_vec);
           vec3 temp_inter = intersection + increment * direction;
           float true_dist = glm::dot(dir_vec,dir_vec);
-          for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-            std::pair<bool, glm::vec3> result = (*it)->intersect(temp_inter, direction);
+          std::vector<std::pair<Object*, vec3> > prunned_objects;
+          getPrunnedObjs(root_box, temp_inter, direction, &prunned_objects);
+          
+          for (std::vector<std::pair<Object*, vec3> >::iterator it = prunned_objects.begin(); it != prunned_objects.end(); ++it) {
+            std::pair<bool, glm::vec3> result = (it->first)->intersect(temp_inter, direction);
             if (result.first && glm::dot(normal, direction) >= 0) {
               vec3 diff_vec = glm::vec3(result.second.x - temp_inter.x,
                                         result.second.y - temp_inter.y,
@@ -131,25 +175,12 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, const
     if (recurse > 0) {  // This is for reflection
       float times = 2 * glm::dot(eyedir, normal);
       vec3 reflection_direction = glm::normalize(-eyedir+(times * normal));
-      float min_distance = std::numeric_limits<float>::max();
-      Object* i_obj;
-      glm::vec3 intersec;   // idk if u need this
       vec3 temp_start = intersection + increment * reflection_direction;
-      
-      for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-          std::pair<bool, glm::vec3> result = (*it)->intersect(temp_start, reflection_direction);
-          if(result.first) {
-              glm::vec3 diff = result.second - temp_start;
-              float dist = glm::dot(diff, diff);
-              if (dist < min_distance) {
-                  min_distance = dist;
-                  i_obj = *it;
-                  intersec = result.second;
-              }
-          }
-      }
-      if (min_distance != std::numeric_limits<float>::max()) {
-        finalcolor += obj->_specular * calculateColor(i_obj->getObject(), intersec, intersection, recurse - 1); 
+      std::pair<Object*, vec3> i_result = calculateIntersection(temp_start, reflection_direction);
+      Object* i_obj = i_result.first;
+      glm::vec3 intersec = i_result.second;
+      if (i_obj != NULL) {
+        finalcolor += obj->_specular * calculateColor(i_obj, intersec, intersection, recurse - 1); 
       }
     }
     return glm::vec4(std::min(finalcolor[0],static_cast<float>(1)), std::min(finalcolor[1],static_cast<float>(1)),

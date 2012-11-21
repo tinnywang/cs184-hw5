@@ -17,7 +17,6 @@ public:
   virtual std::pair<bool,vec3> intersect(const vec3& origin, const vec3& direction) {};
   virtual vec3 getNormal(const vec3& intersect) {};
   virtual std::pair<vec3, vec3> getBoundingBoxDimensions() {};
-  virtual Object * getObject() {};
 
   shape _type ;
   vec4 _ambient;

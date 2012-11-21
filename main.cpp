@@ -3,7 +3,7 @@
 /* Extends HW 1 to deal with shading, more transforms and multiple objects   */
 /*****************************************************************************/
 
-
+#include <algorithm>
 #include <iostream>
 #include <limits>
 #include <string>

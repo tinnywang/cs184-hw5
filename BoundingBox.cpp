@@ -7,11 +7,15 @@ BoundingBox::BoundingBox(Object * obj) {
   std::pair<vec3, vec3> dimensions = obj->getBoundingBoxDimensions();
   _min = dimensions.first;
   _max = dimensions.second;
+  _left_box = NULL;
+  _right_box = NULL;
 }
 
 BoundingBox::BoundingBox(BoundingBox* left, BoundingBox* right) {
+  _obj = NULL;
   _left_box = left;
   _right_box = right;
+  _type = boundingbox;
   _min = vec3(std::min(left->_min[0], right->_min[0]), std::min(left->_min[1], right->_min[1]), std::min(left->_min[2], right->_min[2]));
   _max = vec3(std::min(left->_max[0], right->_max[0]), std::min(left->_max[1], right->_max[1]), std::min(left->_max[2], right->_max[2]));
 }
@@ -99,6 +103,3 @@ vec3 BoundingBox::getCenter() {
   return (_min + _max) * multiplier;
 }
 
-Object * BoundingBox::getObject() {
-  return _obj;
-}
