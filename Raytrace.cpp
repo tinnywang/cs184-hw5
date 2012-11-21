@@ -127,8 +127,8 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, int r
     finalcolor += obj->_ambient + obj->_emission;
     
     if (recurse != 0) {  // This is for reflection
-      float times = 2 * glm::dot(-eyedir, normal);
-      vec3 reflection_direction = glm::normalize(-eyedir-(times * normal));
+      float times = 2 * glm::dot(eyedir, normal);
+      vec3 reflection_direction = glm::normalize(-eyedir+(times * normal));
       float min_distance = std::numeric_limits<float>::max();
       Object* i_obj;
       glm::vec3 intersec;   // idk if u need this
