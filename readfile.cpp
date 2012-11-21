@@ -34,14 +34,6 @@ using namespace std ;
 #include "readfile.h"
 
 
-// The function below applies the appropriate transform to a 4-vector
-void matransform(stack<mat4> &transfstack, GLfloat * values) {
-    mat4 transform = transfstack.top() ;
-    vec4 valvec = vec4(values[0],values[1],values[2],values[3]) ;
-    vec4 newval = valvec * transform ;
-    for (int i = 0 ; i < 4 ; i++) values[i] = newval[i] ;
-}
-
 void rightmultiply(const mat4 & M, stack<mat4> &transfstack) {
     mat4 &T = transfstack.top() ;
     // Right multiply M, but do this left to account for row/column major
@@ -280,12 +272,7 @@ void readfile(const char * filename) {
         // As well as booleans
 
         eye = eyeinit ;
-        up = upinit ;
-        amount = 5;
-        sx = sy = 1.0 ; // scales in x and y
-        tx = ty = 0.0 ; // translation in x and y
-        useGlu = false; // don't use the glu perspective/lookat fns
-
+        up = upinit ;        
     }
     else {
         cerr << "Unable to Open Input Data File " << filename << "\n" ;

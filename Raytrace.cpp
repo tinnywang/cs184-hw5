@@ -8,6 +8,7 @@
 
 void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fovy, int width, int height, FIBITMAP* bitmap, int recurse) {
     //std::cout << objects[0]->transform[2][1] << "\n";
+    int count = 0;
     for (float i = 0; i < height; i++) {
         for (float j = 0; j < width; j++) {
             glm::vec3 ray_direction = calculateRay(eye, center, up, fovx, fovy, width, height, i+.5, j+.5);
@@ -35,6 +36,7 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
                 FreeImage_SetPixelColor(bitmap, j, height - i - 1, &color);
             }
         }
+        std::cout << ++count << " rows out of " << height << " rows calculated.\n"; 
     }
 }
 
