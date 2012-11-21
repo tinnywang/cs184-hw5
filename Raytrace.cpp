@@ -27,7 +27,7 @@ void Raytrace::raytrace (vec3& eye, vec3& center, vec3& up, float fovx, float fo
                 }
             }
             if (min_distance != std::numeric_limits<float>::max()) {
-                vec4 phongColor = calculateColor(i_obj, intersection, eye, recurse);
+                vec4 phongColor = calculateColor(i_obj->getObject(), intersection, eye, recurse);
                 RGBQUAD color;
                 color.rgbBlue = 255 * phongColor.x;
                 color.rgbGreen = 255 * phongColor.y;
@@ -147,7 +147,7 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, vec3 
           }
       }
       if (min_distance != std::numeric_limits<float>::max()) {
-        finalcolor += obj->_specular * calculateColor(i_obj, intersec, intersection, recurse - 1); 
+        finalcolor += obj->_specular * calculateColor(i_obj->getObject(), intersec, intersection, recurse - 1); 
       }
     }
     return glm::vec4(std::min(finalcolor[0],static_cast<float>(1)), std::min(finalcolor[1],static_cast<float>(1)),

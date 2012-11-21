@@ -12,6 +12,7 @@ public:
 	virtual ~Sphere() {};
 	virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction);
 	vec3 getNormal(vec3 intersect);
+	std::pair<vec3, vec3> getBoundingBoxDimensions();
 
 private:
   GLfloat _position[3];

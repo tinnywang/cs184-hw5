@@ -11,6 +11,7 @@
 #include "Object.h"
 #include "Sphere.h"
 #include "Triangle.h"
+#include "BoundingBox.h"
 
 #ifdef MAINPROGRAM
 #define EXTERN

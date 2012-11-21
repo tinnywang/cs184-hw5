@@ -29,14 +29,3 @@ specular 0 0 0
 # parts of the assignment.
 
 sphere 0 .15 0 .15
- 
-diffuse 0 0 1
-specular 1 1 1 
-
-vertex -1  0 1
-vertex +1  0 1 
-vertex +1  0 -1
-vertex -1  0 -1 
-
-tri 0 1 2
-tri 0 2 3

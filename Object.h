@@ -7,7 +7,7 @@
 typedef glm::vec3 vec3; 
 typedef glm::vec4 vec4;
 
-enum shape {sphere, tri, trinorm} ;
+enum shape {sphere, tri, trinorm, boundingbox} ;
 
 class Object
 {
@@ -16,6 +16,8 @@ public:
 	virtual ~Object() {};
   virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction) {};
   virtual vec3 getNormal(vec3 ray) {};
+  virtual std::pair<vec3, vec3> getBoundingBoxDimensions() {};
+  virtual Object * getObject() {};
 
   shape _type ;
   vec4 _ambient;

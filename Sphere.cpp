@@ -58,3 +58,10 @@ vec3 Sphere::getNormal(vec3 intersect) {
     vec4 homo_normal = vec4(normal.x, normal.y, normal.z, 0) * glm::transpose(glm::inverse(transform));
     return glm::normalize(vec3(homo_normal.x, homo_normal.y, homo_normal.z));
 }
+
+std::pair<vec3, vec3> Sphere::getBoundingBoxDimensions() {
+  vec3 min = glm::vec3(_position[0] - _radius, _position[1] - _radius, _position[2] - _radius);
+  vec3 max = glm::vec3(_position[0] + _radius, _position[1] + _radius, _position[2] + _radius);
+  return std::make_pair(min, max);
+}
+  
