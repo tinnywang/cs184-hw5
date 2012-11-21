@@ -12,8 +12,8 @@ class BoundingBox : public Object
 public:
   BoundingBox(Object *object);
   BoundingBox(Object *obj1, Object *obj2);
-  virtual ~BoundingBox() {};
-  virtual std::pair<bool, vec3> intersect(vec3 origin, vec3 direction);
+  virtual ~BoundingBox();
+  virtual std::pair<bool, vec3> intersect(const vec3& origin, const vec3& direction);
   virtual Object * getObject();
 
   Object * leftObj = NULL;

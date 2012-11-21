@@ -14,8 +14,8 @@ class Object
 public:
   Object() {};
   virtual ~Object() {};
-  virtual std::pair<bool,vec3> intersect(vec3 origin, vec3 direction) {};
-  virtual vec3 getNormal(vec3 ray) {};
+  virtual std::pair<bool,vec3> intersect(const vec3& origin, const vec3& direction) {};
+  virtual vec3 getNormal(const vec3& intersect) {};
   virtual std::pair<vec3, vec3> getBoundingBoxDimensions() {};
   virtual Object * getObject() {};
 
