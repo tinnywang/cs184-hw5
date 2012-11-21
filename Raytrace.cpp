@@ -13,27 +13,29 @@ namespace {
       if (node->_left_box != NULL) {
         if (node->_left_box->_obj != NULL) {
           results->push_back(std::make_pair(node->_left_box->_obj, bb_result.second));
-        } else {
+        } else {          
           getPrunnedObjs(node->_left_box, source, direction, results);
         }
       }
-      if (node->_right_box != NULL) {
-        if (node->_right_box->_obj != NULL) {
+      if (node->_right_box != NULL) {        
+        if (node->_right_box->_obj != NULL) {          
           results->push_back(std::make_pair(node->_right_box->_obj, bb_result.second));
         } else {
           getPrunnedObjs(node->_right_box, source, direction, results);
         }
       }
-    }
+      if (node->_obj != NULL) {
+        results->push_back(std::make_pair(node->_obj, bb_result.second));        
+      }    
+    }    
   }
   
   std::pair<Object*, vec3> calculateIntersection(const vec3& eye, const vec3& ray_direction) {
     float min_distance = std::numeric_limits<float>::max();
     Object* i_obj = NULL;
     glm::vec3 intersection;
-    std::vector<std::pair<Object*, vec3> > prunned_objects;
-    getPrunnedObjs(root_box, eye, ray_direction, &prunned_objects);
-    
+    std::vector<std::pair<Object*, vec3> > prunned_objects;    
+    getPrunnedObjs(root_box, eye, ray_direction, &prunned_objects);  
     for (std::vector<std::pair<Object*, vec3> >::iterator it = prunned_objects.begin(); it != prunned_objects.end(); ++it) {
         if (min_distance != std::numeric_limits<float>::max()) {  // another optimization
           glm::vec3 difference = it->second - eye;
@@ -47,7 +49,7 @@ namespace {
             glm::vec3 difference = result.second - eye;
             float dist = glm::dot(difference, difference);
             if (dist < min_distance) {
-                min_distance = dist;
+                min_distance = dist;                
                 i_obj = it->first;
                 intersection = result.second;
             }
@@ -62,10 +64,9 @@ void Raytrace::raytrace (const vec3& eye, const vec3& center, const vec3& up, fl
         for (float j = 0; j < width; j++) {
             glm::vec3 ray_direction = calculateRay(eye, center, up, fovx, fovy, width, height, i+.5, j+.5);
             std::pair<Object*, vec3> i_result = calculateIntersection(eye, ray_direction);
-            Object* i_obj = i_result.first;
+            Object* i_obj = i_result.first;            
             glm::vec3 intersection = i_result.second; 
-            
-            if (i_obj != NULL) {
+            if (i_obj != NULL) {              
                 vec4 phongColor = calculateColor(i_obj, intersection, eye, recurse);
                 RGBQUAD color;
                 color.rgbBlue = 255 * phongColor.x;

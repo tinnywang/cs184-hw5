@@ -18,6 +18,7 @@ public:
 	std::pair<vec3, vec3> getBoundingBoxDimensions();
 	std::pair<vec3, vec3> getMaxMinVertices(std::vector<vec3> vertices);
 
+private:
   GLfloat _position[3];
   GLfloat _radius;
   GLfloat _t_position[3];

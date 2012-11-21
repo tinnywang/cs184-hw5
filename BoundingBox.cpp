@@ -17,7 +17,7 @@ BoundingBox::BoundingBox(BoundingBox* left, BoundingBox* right) {
   _right_box = right;
   _type = boundingbox;
   _min = vec3(std::min(left->_min[0], right->_min[0]), std::min(left->_min[1], right->_min[1]), std::min(left->_min[2], right->_min[2]));
-  _max = vec3(std::min(left->_max[0], right->_max[0]), std::min(left->_max[1], right->_max[1]), std::min(left->_max[2], right->_max[2]));
+  _max = vec3(std::max(left->_max[0], right->_max[0]), std::max(left->_max[1], right->_max[1]), std::max(left->_max[2], right->_max[2]));
 }
 BoundingBox::~BoundingBox() {
   if (_left_box != NULL) {
@@ -36,7 +36,7 @@ std::pair<bool, vec3> BoundingBox::intersect(const vec3& origin, const vec3& dir
     vec3 x = vec3(1, 0, 0), y = vec3(0, 1, 0), z = vec3(0, 0, 1), rtn = vec3(inf, inf, inf);
     vec3 intersection;
     // near face
-    if (glm::dot(direction, z) != 0) {
+    if (glm::dot(direction, z) < 0) {
       t = -glm::dot((origin - _max), z)/glm::dot(direction, z);
       if (t > 0) {
         intersection = origin + direction * t;
@@ -46,7 +46,7 @@ std::pair<bool, vec3> BoundingBox::intersect(const vec3& origin, const vec3& dir
       }
     } 
     // far face
-    if (glm::dot(direction, -z) != 0) {
+    if (glm::dot(direction, -z) < 0) {
       t = -glm::dot((origin - _min), -z)/glm::dot(direction, -z);
       if (t > 0) {      
         intersection = origin + direction * t;
@@ -56,7 +56,7 @@ std::pair<bool, vec3> BoundingBox::intersect(const vec3& origin, const vec3& dir
       }
     }
     // right face
-    if (glm::dot(direction, x) != 0) {
+    if (glm::dot(direction, x) < 0) {
       t = -glm::dot((origin - _max), x)/glm::dot(direction, x);
       if (t > 0) {
         intersection = origin + direction * t;
@@ -66,7 +66,7 @@ std::pair<bool, vec3> BoundingBox::intersect(const vec3& origin, const vec3& dir
       }
     }
     // left face
-    if (glm::dot(direction, -x) != 0) {
+    if (glm::dot(direction, -x) < 0) {
       t = -glm::dot((origin - _min), -x)/glm::dot(direction, -x);
       if (t > 0) {
         intersection = origin + direction * t;
@@ -76,7 +76,7 @@ std::pair<bool, vec3> BoundingBox::intersect(const vec3& origin, const vec3& dir
       }
     }
     // top face
-    if (glm::dot(direction, y) != 0) {
+    if (glm::dot(direction, y) < 0) {
       t = -glm::dot((origin - _max), y)/glm::dot(direction, y);
       if (t > 0) {
         intersection = origin + direction * t;
@@ -86,7 +86,7 @@ std::pair<bool, vec3> BoundingBox::intersect(const vec3& origin, const vec3& dir
       }
     }
     // bottom face
-    if (glm::dot(direction, -y) != 0) {
+    if (glm::dot(direction, -y) < 0) {
       t = -glm::dot((origin - _min), -y)/glm::dot(direction, -y);
       if (t > 0) {
         intersection = origin + direction * t;
