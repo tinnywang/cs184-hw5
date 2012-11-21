@@ -67,7 +67,6 @@ EXTERN glm::vec4 emission ;
 EXTERN GLfloat shininess ;
 
 // For multiple objects, read from a file.
-const int maxobjects = 1000 ;
 EXTERN int numobjects ;
 EXTERN std::vector<Object*> objects ;
 

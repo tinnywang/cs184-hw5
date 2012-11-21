@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
     output = "temp.png";
     readfile(argv[1]) ;
     FIBITMAP* bitmap = FreeImage_Allocate(w, h, bpp);
-    float fovx = fovy * static_cast<float>(w)/h;
+    float fovx = 2*glm::degrees(atan(tan(glm::radians((float)fovy/2))*((float)w/h))); 
 
     Raytrace rt;
     rt.raytrace(eye, center, up, fovx, fovy, w, h, bitmap, depth);

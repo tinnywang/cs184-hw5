@@ -189,49 +189,44 @@ void readfile(const char * filename) {
                         vertices.push_back(glm::vec3(values[0], values[1], values[2]));
                         normals.push_back(glm::vec3(values[3], values[4], values[5]));
                     }
-                } else if (cmd == "sphere" || cmd == "tri" || cmd == "trinormal") {
-                    if (numobjects == maxobjects) // No more objects
-                        cerr << "Reached Maximum Number of Objects " << numobjects << " Will ignore further objects\n" ;
-                    else {
-                        if (cmd == "sphere") {
-                            validinput = readvals(s, 4, values);
-                            if (validinput) {
-                                Sphere* obj = new Sphere(values[0], values[1], values[2], values[3]);
-                                obj->_ambient = ambient;
-                                obj->_diffuse = diffuse ;
-                                obj->_specular = specular ;
-                                obj->_emission = emission ;
-                                obj->_shininess = shininess ;
-                                obj->transform = transfstack.top() ;
-                                objects.push_back(obj);
-                            }
-                        } else if (cmd == "tri") {
-                            validinput = readvals(s, 3, values);
-                            if (validinput) {
-                                Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]]);
-                                obj->_ambient = ambient;
-                                obj->_diffuse = diffuse;
-                                obj->_specular = specular;
-                                obj->_emission = emission;
-                                obj->_shininess = shininess ;
-                                obj->transform = transfstack.top() ;
-                                objects.push_back(obj);
-                            }
-                        } else if (cmd == "trinormal") {
-                            validinput = readvals(s, 6, values);
-                            if (validinput) {
-                                Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]],
-                                                             normals[values[0]], normals[values[1]], normals[values[2]]);
-                                obj->_ambient = ambient;
-                                obj->_diffuse = diffuse;
-                                obj->_specular = specular;
-                                obj->_emission = emission;
-                                obj->_shininess = shininess ;
-                                obj->transform = transfstack.top() ;
-                                objects.push_back(obj);
-                            }
+                } else if (cmd == "sphere" || cmd == "tri" || cmd == "trinormal") {                    
+                    if (cmd == "sphere") {
+                        validinput = readvals(s, 4, values);
+                        if (validinput) {
+                            Sphere* obj = new Sphere(values[0], values[1], values[2], values[3]);
+                            obj->_ambient = ambient;
+                            obj->_diffuse = diffuse ;
+                            obj->_specular = specular ;
+                            obj->_emission = emission ;
+                            obj->_shininess = shininess ;
+                            obj->transform = transfstack.top() ;
+                            objects.push_back(obj);
                         }
-                        ++numobjects;
+                    } else if (cmd == "tri") {
+                        validinput = readvals(s, 3, values);
+                        if (validinput) {
+                            Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]]);
+                            obj->_ambient = ambient;
+                            obj->_diffuse = diffuse;
+                            obj->_specular = specular;
+                            obj->_emission = emission;
+                            obj->_shininess = shininess ;
+                            obj->transform = transfstack.top() ;
+                            objects.push_back(obj);
+                        }
+                    } else if (cmd == "trinormal") {
+                        validinput = readvals(s, 6, values);
+                        if (validinput) {
+                            Triangle* obj = new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]],
+                                                         normals[values[0]], normals[values[1]], normals[values[2]]);
+                            obj->_ambient = ambient;
+                            obj->_diffuse = diffuse;
+                            obj->_specular = specular;
+                            obj->_emission = emission;
+                            obj->_shininess = shininess ;
+                            obj->transform = transfstack.top() ;
+                            objects.push_back(obj);
+                        }
                     }
                 }
                 // Transformations
