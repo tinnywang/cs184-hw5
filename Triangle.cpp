@@ -74,6 +74,7 @@ vec3 Triangle::getNormal(vec3 intersect) {
 }
 
 std::pair<vec3, vec3> Triangle::getBoundingBoxDimensions() {
+  calculateTransform();
   vec3 min, max;
   for (int i = 0; i < 3; i++) {
     float max_coord = std::max(std::max(_t_vertices[0][i], _t_vertices[1][i]), _t_vertices[2][i]);
