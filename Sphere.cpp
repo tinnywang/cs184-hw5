@@ -49,12 +49,10 @@ std::pair<bool,vec3> Sphere::intersect(vec3 origin, vec3 direction) {
 }
 
 vec3 Sphere::getNormal(vec3 intersect) {    
-    glm::vec4 homo_center = glm::vec4(_position[0], _position[1], _position[2], 1);
+    glm::vec3 center = glm::vec3(_position[0], _position[1], _position[2]);
     glm::vec4 homo_inter = glm::vec4(intersect[0], intersect[1], intersect[2], 1);
-    homo_center = homo_center * glm::inverse(transform);
     homo_inter = homo_inter * glm::inverse(transform);
     intersect = glm::vec3(homo_inter[0]/homo_inter[3], homo_inter[1]/homo_inter[3], homo_inter[2]/homo_inter[3]);
-    glm::vec3 center = glm::vec3(homo_center[0]/homo_center[3], homo_center[1]/homo_center[3], homo_center[2]/homo_center[3]);
 
     vec3 normal = glm::normalize(intersect - center);
     vec4 homo_normal = vec4(normal.x, normal.y, normal.z, 0) * glm::transpose(glm::inverse(transform));
