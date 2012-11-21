@@ -12,9 +12,7 @@ class Sphere : public Object
 {
 public:
 	Sphere(GLfloat pos1, GLfloat pos2, GLfloat pos3, GLfloat radius) ;
-	virtual ~Sphere() {
-    std::cout << "UH OH \n";
-	};
+	virtual ~Sphere() {};
 	virtual std::pair<bool,vec3> intersect(const vec3& origin, const vec3& direction);
 	vec3 getNormal(const vec3& intersect);
 	std::pair<vec3, vec3> getBoundingBoxDimensions();

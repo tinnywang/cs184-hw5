@@ -62,6 +62,8 @@ std::vector<BoundingBox*> BBTreeRecurse( std::vector<BoundingBox*> nodes ) {
       std::vector<BoundingBox*>::iterator position = std::find(candidates.begin(), candidates.end(), *it);
       if (position != candidates.end()) {
           candidates.erase(position);
+      } else {
+          continue;
       }
       BoundingBox* closest_match = findClosestBB(*it, candidates);
       new_nodes.push_back(new BoundingBox(*it, closest_match));
