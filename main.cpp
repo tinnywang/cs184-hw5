@@ -38,7 +38,7 @@ BoundingBox* findClosestBB(BoundingBox* source, std::vector<BoundingBox*> candid
   float min_distance = std::numeric_limits<float>::max();
   BoundingBox* closest;
   for ( std::vector<BoundingBox*>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
-    float temp_dist = glm::dot(source_center,(*it)->getCenter());
+    float temp_dist = glm::dot(source_center-(*it)->getCenter(),source_center-(*it)->getCenter());
     if (temp_dist < min_distance) {
       closest = *it;
       min_distance = temp_dist;

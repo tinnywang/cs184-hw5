@@ -10,6 +10,9 @@ namespace {
   void getPrunnedObjs(BoundingBox* node, const vec3& source, const vec3& direction, std::vector<std::pair<Object*, vec3> > * results) {
     std::pair<bool, glm::vec3> bb_result = node->intersect(source,direction);
     if (bb_result.first) {
+      if (node->_obj != NULL) {
+        results->push_back(std::make_pair(node->_obj, bb_result.second));        
+      }
       if (node->_left_box != NULL) {
         if (node->_left_box->_obj != NULL) {
           results->push_back(std::make_pair(node->_left_box->_obj, bb_result.second));
@@ -24,9 +27,6 @@ namespace {
           getPrunnedObjs(node->_right_box, source, direction, results);
         }
       }
-      if (node->_obj != NULL) {
-        results->push_back(std::make_pair(node->_obj, bb_result.second));        
-      }    
     }    
   }
   
@@ -66,7 +66,7 @@ void Raytrace::raytrace (const vec3& eye, const vec3& center, const vec3& up, fl
             std::pair<Object*, vec3> i_result = calculateIntersection(eye, ray_direction);
             Object* i_obj = i_result.first;            
             glm::vec3 intersection = i_result.second; 
-            if (i_obj != NULL) {              
+            if (i_obj != NULL) {
                 vec4 phongColor = calculateColor(i_obj, intersection, eye, recurse);
                 RGBQUAD color;
                 color.rgbRed = 255 * phongColor.x;
@@ -126,7 +126,6 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, const
           vec3 temp_inter = intersection + increment * direction;
           std::vector<std::pair<Object*, vec3> > prunned_objects;
           getPrunnedObjs(root_box, temp_inter, direction, &prunned_objects);
-          
           for (std::vector<std::pair<Object*, vec3> >::iterator it = prunned_objects.begin(); it != prunned_objects.end(); ++it) {
             std::pair<bool, glm::vec3> result = (it->first)->intersect(temp_inter, direction);
             if (result.first) {              
