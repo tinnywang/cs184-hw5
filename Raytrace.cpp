@@ -69,9 +69,9 @@ void Raytrace::raytrace (const vec3& eye, const vec3& center, const vec3& up, fl
             if (i_obj != NULL) {              
                 vec4 phongColor = calculateColor(i_obj, intersection, eye, recurse);
                 RGBQUAD color;
-                color.rgbBlue = 255 * phongColor.x;
+                color.rgbRed = 255 * phongColor.x;
                 color.rgbGreen = 255 * phongColor.y;
-                color.rgbRed = 255 * phongColor.z;
+                color.rgbBlue = 255 * phongColor.z;
                 FreeImage_SetPixelColor(bitmap, j, height - i - 1, &color);
             }
         }
@@ -129,7 +129,7 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, const
           
           for (std::vector<std::pair<Object*, vec3> >::iterator it = prunned_objects.begin(); it != prunned_objects.end(); ++it) {
             std::pair<bool, glm::vec3> result = (it->first)->intersect(temp_inter, direction);
-            if (result.first && glm::dot(normal, direction) >= 0) {              
+            if (result.first) {              
               shadow = true;
               break;
             }
@@ -151,7 +151,7 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, const
           
           for (std::vector<std::pair<Object*, vec3> >::iterator it = prunned_objects.begin(); it != prunned_objects.end(); ++it) {
             std::pair<bool, glm::vec3> result = (it->first)->intersect(temp_inter, direction);
-            if (result.first && glm::dot(normal, direction) >= 0) {
+            if (result.first) {
               vec3 diff_vec = glm::vec3(result.second.x - temp_inter.x,
                                         result.second.y - temp_inter.y,
                                         result.second.z - temp_inter.z);
@@ -166,7 +166,7 @@ glm::vec4 Raytrace::calculateColor(Object * obj, const vec3& intersection, const
             continue;
           }
           halfAngle = glm::normalize(direction + eyedir);
-          distance = true_dist;
+          distance = glm::sqrt(true_dist);
         }
         vec4 color = lightcolor[i];
         finalcolor += phongIllumination(normal, direction, halfAngle, color, distance, obj->_diffuse, obj->_specular, obj->_shininess);
